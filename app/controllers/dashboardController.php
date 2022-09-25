@@ -9,9 +9,7 @@
 class dashboardController extends Controller {
   function __construct()
   {
-    session_destroy();
     // Validación de sesión de usuario, descomentar si requerida
-    
     if (!Auth::validate()) {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
@@ -21,6 +19,8 @@ class dashboardController extends Controller {
   
   function index()
   {
+    echo get_user('rol');
+    die;
     $data = 
     [
       'title' => 'Reemplazar título',
