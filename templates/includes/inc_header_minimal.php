@@ -18,7 +18,7 @@
   <?php require_once INCLUDES.'inc_styles.php'; ?>
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-secondary">
 
 <!-- Page Wrapper -->
 <div id="wrapper">

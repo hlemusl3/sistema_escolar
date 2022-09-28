@@ -12,7 +12,8 @@
                     <div class="col-lg-6">
                         <div class="p-5">
                             <div class="text-center">
-                              <h1 class="h4 text-gray-900 mb-4"><?php echo sprintf('¡Bienvenido a %s!', get_sitename()); ?></h1>
+                            <img src="<?php echo get_logo(); ?>" alt="<?php echo get_sitename(); ?>" class="img-fluid">
+                              <h1 class="h4 text-gray-900 mb-4"><?php echo sprintf('¡Bienvenido a LVA!'); ?></h1>
                             </div>
 
                             <?php echo Flasher::flash(); ?>
