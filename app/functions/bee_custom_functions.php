@@ -39,3 +39,27 @@ function is_user($rol, $roles_aceptados){
 
   return in_array($rol, array_merge($default, $roles_aceptados));
 }
+
+/**
+ * 0 Acceso no autorizado
+ * 1 Acción no autorizada
+ * 2 Hubo un error al agregar el registro
+ * 3 Hubo un error al actualizar el registro
+ * 4 Hubo un error al borrar el registro
+ * 
+ * @param integer $index
+ * @return string
+ */
+function get_notificaciones($index = 0)
+{
+  $notificaciones =   
+  [
+    'Acceso no autorizado.',
+    'Acción no autorizada.',
+    'Hubo un error al agregar el registro',
+    'Hubo un error al actualizar el registro',
+    'Hubo un error al borrar el registro'
+  ];
+
+  return isset($notificaciones[$index]) ? $notificaciones[$index] : $notificaciones[0];
+}

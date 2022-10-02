@@ -112,7 +112,7 @@ class PaginationHandler extends Model
 		];
 	}
 
-	public static function paginate($sql, $params = [], $rpp = 20)
+	public static function paginate($sql, $params = [], $rpp = 10)
 	{
 		$self         = new self();
 		$self->query  = $sql;
