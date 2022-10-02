@@ -9,21 +9,26 @@
 class profesoresController extends Controller {
   function __construct()
   {
-    // Validación de sesión de usuario, descomentar si requerida
-    /**
+    //Validacion de sesión de usuario
     if (!Auth::validate()) {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
-    */
   }
   
   function index()
   {
+    if(!is_admin(get_user_role())){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
     $data = 
     [
-      'title' => 'Reemplazar título',
-      'msg'   => 'Bienvenido al controlador de "profesores", se ha creado con éxito si ves este mensaje.'
+      'title' => 'Todos los profesores',
+      'slug' => 'profesores',
+      'button' => ['url' => 'profesores/agregar', 'text' => '<i class="fas fa-plus"></i> Agregar profesores'],
+      'profesores' => profesorModel::all_paginated()
     ];
     
     // Descomentar vista si requerida

@@ -102,7 +102,8 @@ $(document).ready(function() {
           last: "Última"
         }
       },
-      paging: true
+      paging: true,
+      aaSorting: []
     }
   );
 
