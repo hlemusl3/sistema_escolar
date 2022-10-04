@@ -63,3 +63,49 @@ function get_notificaciones($index = 0)
 
   return isset($notificaciones[$index]) ? $notificaciones[$index] : $notificaciones[0];
 }
+
+function get_estados_usuarios()
+{
+  return
+  [
+    ['pendiente', 'Pendiente de activación'],
+    ['activo', 'Activo'],
+    ['supendido', 'Suspendido']
+  ];
+}
+
+function format_estado_usuario($status)
+{
+  $placeholder = '<div class="badge %s"><i class="%s"></i>%s</div>';
+  $classes = '';
+  $icon = '';
+  $text = '';
+
+  switch ($status) {
+    case 'pendiente':
+      $classes = 'badge-warning text-dark';
+      $icon = 'fas fa-clock';
+      $text = ' Pendiente';
+      break;
+
+    case 'activo':
+      $classes = 'badge-success';
+      $icon = 'fas fa-check';
+      $text = ' Activo';
+      break;
+
+    case 'suspendido':
+    $classes = 'badge-danger';
+    $icon = 'fas fa-times';
+    $text = ' Suspendido';
+    break;
+  
+    default:
+    $classes = 'badge-danger';
+    $icon = 'fas fa-question';
+    $text = ' Desconocido';
+    break;
+  }
+
+  return sprintf($placeholder, $classes, $icon, $text);
+}

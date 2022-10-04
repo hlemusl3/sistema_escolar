@@ -38,5 +38,12 @@ class profesorModel extends Model {
     $sql = 'SELECT * FROM usuarios WHERE rol = "profesor" AND id = :id LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
+
+static function by_numero($numero)
+{
+  // Un registro con $numero
+  $sql = 'SELECT * FROM usuarios WHERE rol = "profesor" AND numero = :numero LIMIT 1';
+  return ($rows = parent::query($sql, ['numero' => $numero])) ? $rows[0] : [];
+}
 }
 
