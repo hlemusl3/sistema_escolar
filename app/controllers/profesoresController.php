@@ -98,20 +98,76 @@ class profesoresController extends Controller {
     }
 
   }
-  function post_agregar()
-  {
-
-  }
-
-  function editar($id)
-  {
-    View::render('editar');
-  }
 
   function post_editar()
   {
+    try {
+      if(!check_posted_data(['csrf', 'id', 'nombres', 'apellidos', 'email', 'telefono', 'password'], $_POST) || !Csrf::validate($_POST['csrf'])){
+        throw new Exception(get_notificaciones(0));
+      }
+
+      //validar rol
+      if(!is_admin(get_user_role())){
+        throw new Exception(get_notificaciones(1));
+      }
+      
+      $id = clean($_POST["id"]);
+
+      if(!$profesor = profesorModel::by_id($id)) {
+        throw new Exception('No existe el profesor en la base de datos.');
+      }
+
+      $nombres = clean($_POST["nombres"]);
+      $apellidos = clean($_POST["apellidos"]);
+      $email = clean($_POST["email"]);
+      $telefono = clean($_POST["telefono"]);
+      $password = clean($_POST["password"]);
+
+      //Validar que el correo sea válido
+      if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        throw new Exception('Ingresa un correo electrónico válido.');
+      }
+
+      $data = 
+      [
+        'nombres' => $nombres,
+        'apellidos' => $apellidos,
+        'nombre_completo' => sprintf('%s %s', $nombres, $apellidos),
+        'email' => $email,
+        'telefono' => $telefono
+      ];
+
+      //En caso de que se cambie el correo electrónico
+      if($profesor['email'] !== $email && !in_array($profesor['status'], ['pendiente', 'suspendido'])){
+        $data['status'] = 'pendiente';
+      }
+
+      //En caso de que se cambie la contraseña
+      if(!empty($password) && !password_verify($password.AUTH_SALT, $profesor['password'])){
+        $data['password'] = password_hash($password.AUTH_SALT, PASSWORD_BCRYPT);
+      }
+
+      //Insertar a la base de datos
+      if(!profesorModel::update(profesorModel::$t1, ['id' => $id], $data)){
+        throw new Exception(get_notificaciones(3));
+      }
+
+      //Volver a cargar la información del profesor
+      $profesor = profesorModel::by_id($id);
+
+      Flasher::new(sprintf('Profesor <b>%s</b> actualizado con éxito.', $profesor['nombre_completo']), 'success');
+      Redirect::back();
+
+    } catch (PDOException $e) { //Excepciones de errores por la db
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    }
 
   }
+
 
   function borrar($id)
   {

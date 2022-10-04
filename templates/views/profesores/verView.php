@@ -43,7 +43,7 @@
 
                             <div class="form-group">
                                 <div for="password">Contraseña</div>
-                                <input type="password" class="form-control" id="password" name="password" value="<?php echo $d->p->password; ?>">
+                                <input type="password" class="form-control" id="password" name="password">
                             </div>
 
                             <div class="form-group">
