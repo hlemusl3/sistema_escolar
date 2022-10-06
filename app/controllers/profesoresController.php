@@ -42,9 +42,6 @@ class profesoresController extends Controller {
       Redirect::back();
     }
 
-    debug(materiaModel::disponibles_profesor($profesor['id']));
-    die;
-
     $data =
     [
       'title' => sprintf('Profesor #%s', $profesor['numero']),
@@ -130,7 +127,7 @@ class profesoresController extends Controller {
       if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         throw new Exception('Ingresa un correo electrónico válido.');
       }
-
+      
       $data = 
       [
         'nombres' => $nombres,

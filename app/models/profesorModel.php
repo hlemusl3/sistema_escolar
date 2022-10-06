@@ -45,5 +45,28 @@ static function by_numero($numero)
   $sql = 'SELECT * FROM usuarios WHERE rol = "profesor" AND numero = :numero LIMIT 1';
   return ($rows = parent::query($sql, ['numero' => $numero])) ? $rows[0] : [];
 }
+
+static function asignar_materia($id_profesor, $id_materia)
+{
+  $data = 
+  [
+    'id_materia' => $id_materia,
+    'id_profesor' =>  $id_profesor,
+  ];
+
+  if (!$id = self::add('materias_profesores', $data)) return false;
+
+  return $id;
 }
 
+  static function quitar_materia($id_profesor, $id_materia)
+  {
+    $data = 
+    [
+      'id_materia' => $id_materia,
+      'id_profesor' => $id_profesor,
+    ];
+
+    return (self::remove('materias_profesores', $data)) ? true : false;
+  }
+}

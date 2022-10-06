@@ -11,7 +11,7 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th width="5%">#</th>
+<!--                                                <th width="5%">#</th> -->
                                                 <th>Nombre</th>
                                                 <th width="10%">Acción</th>
                                             </tr>
@@ -19,7 +19,7 @@
                                         <tbody>
                                             <?php foreach ($d->materias->rows as $m): ?>
                                             <tr>
-                                                <td><?php echo sprintf('<a href="materias/ver/%s">%s</a>', $m->id, $m->id); ?></td>
+<!--                                                <td><?php echo sprintf('<a href="materias/ver/%s">%s</a>', $m->id, $m->id); ?></td> -->
                                                 <td><?php echo add_ellipsis($m->nombre, 50); ?></td>
                                                 <td>
                                                     <div class="btn-group">

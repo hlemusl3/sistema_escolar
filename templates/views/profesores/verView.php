@@ -82,9 +82,10 @@
 
                             <button class="btn btn-success" type="submit">Agregar</button>
                         </form>
+
                         <hr>
 
-                        <div class="wrapper_materias_profesor"><!-- agregar con Ajax la lista de materias --></div>
+                        <div class="wrapper_materias_profesor" data-id="<?php echo $d->p->id; ?>"><!-- agregar con Ajax la lista de materias --></div>
                 </div>
             </div>
         </div>
