@@ -69,4 +69,16 @@ static function asignar_materia($id_profesor, $id_materia)
 
     return (self::remove('materias_profesores', $data)) ? true : false;
   }
+
+  static function eliminar($id_profesor)
+  {
+    $sql = 'DELETE u, mp FROM usuarios u JOIN materias_profesores mp ON mp.id_profesor = u.id WHERE u.id = :id AND u.rol = "profesor"';
+    return (parent::query($sql, ['id' => $id_profesor])) ? true : false;
+  }
+
+  static function eliminar_solo_profesor($id_profesor)
+  {
+    $sql = 'DELETE u FROM usuarios u WHERE u.id = :id AND u.rol = "profesor"';
+    return (parent::query($sql, ['id' => $id_profesor])) ? true: false;
+  }
 }

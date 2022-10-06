@@ -86,7 +86,7 @@ class profesoresController extends Controller {
         throw new Exception(get_notificaciones(2));
       }
 
-      Flasher::new(sprintf('Nuevo profesor <b>%s</b> agregada con éxito.', $numero), 'success');
+      Flasher::new(sprintf('Nuevo profesor <b>%s</b> agregado con éxito.', $numero), 'success');
       Redirect::to(sprintf('profesores/ver/%s', $numero));
 
     } catch (PDOException $e) { //Excepciones de errores por la db
@@ -168,9 +168,49 @@ class profesoresController extends Controller {
 
   }
 
-
   function borrar($id)
   {
-    // Proceso de borrado
+    try {
+      if(!check_get_data(['_t'], $_GET) || !Csrf::validate($_GET['_t'])){
+        throw new Exception(get_notificaciones(0));
+      }
+
+      //validar rol
+      if(!is_admin(get_user_role())){
+        throw new Exception(get_notificaciones(1));
+      }
+
+      // Exista el profesor
+         if(!$profesor = profesorModel::by_id($id)) {
+        throw new Exception('No existe el profesor en la base de datos.');
+      }
+
+      //Si no existe registro en el profesor, borrar solo el profesor.
+        if(!$materia = materiaModel::materias_profesor($id)) {
+            if (profesorModel::eliminar_solo_profesor($profesor['id']) === false ) {
+              throw new Exception('No se pudo borrar');
+            }
+              Flasher::new(sprintf('Profesor <b>%s</b> borrado con éxito.', $profesor['nombre_completo']), 'success');
+              Redirect::to('profesores');
+      
+        }
+
+      //Borramos el registro y sus conexiones
+      if (profesorModel::eliminar($profesor['id']) === false ) {
+        throw new Exception(get_notificaciones(4));
+      }
+
+      Flasher::new(sprintf('Profesor <b>%s</b> borrado con éxito.', $profesor['nombre_completo']), 'success');
+      Redirect::to('profesores');
+
+    } catch (PDOException $e) { //Excepciones de errores por la db
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    }
+
   }
+
 }

@@ -28,7 +28,7 @@
                                                 <td>
                                                     <div class="btn-group">
                                                         <a href="<?php echo 'profesores/ver/'.$p->numero; ?>" class="btn btn-sm btn-success"><i class="fas fa-eye"></i></a>
-                                                        <a href="<?php echo buildURL('profesores/borrar/'.$p->numero); ?>" class="btn btn-sm btn-danger confirmar"><i class="fas fa-trash"></i></a>
+                                                        <a href="<?php echo buildURL('profesores/borrar/'.$p->id); ?>" class="btn btn-sm btn-danger confirmar"><i class="fas fa-trash"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
