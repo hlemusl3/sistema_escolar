@@ -48,6 +48,12 @@ class loginController extends Controller {
       throw new Exception('Las credenciales no son correctas');
     }
 
+    // Validar el status del usuario
+    if ($user['status'] === 'pendiente') {
+      mail_confirmar_cuenta($user['id']);
+      throw new Exception('Confirma tu dirección de correo electrónico.');
+    }
+
     // Loggear al usuario
     Auth::login($user['id'], $user);
     Redirect::to('dashboard');      
@@ -57,7 +63,55 @@ class loginController extends Controller {
       Redirect::back();
     }catch(PDOException $e){
       Flassher::new($e->getMessage(), 'danger');
-      Redirect::back();
+      Redirect::back();    
+    }
+  }
+
+  function activate()
+  {
+    try {
+      if (!check_get_data(['email', 'hash'], $_GET)) {
+        throw new Exception('El enlace de activación no es válido.');
+      }
+
+      //Data pasada en URL
+      $email = clean($_GET["email"]);
+      $hash = clean($_GET["hash"]);
+
+      //Verificar que exista el usuario con ese email
+      if (!$user = usuarioModel::by_email($email)) {
+        throw new Exception('El enlace de activación no es válido.');
+      }
+
+      $id = $user['id'];
+      $nombre = $user['nombres'];
+      $status = $user['status'];
+      $db_hash = $user['hash'];
+
+      //Verificar el hash del usuario y el status
+      if ($hash !== $db_hash) {
+        throw new Exception('El enlace de activación no es válido.');
+      }
+
+      //Validar el status del usuario
+      if ($status !== 'pendiente') {
+        throw new Exception('El usuario no está pendiente de activación.');
+      }
+
+      //Activar cuenta
+      if (usuarioModel::update(usuarioModel::$t1, ['id' => $id], ['status' => 'activo']) === false ) {
+        throw new Exception(get_notificaciones(3));
+      }
+
+      Flasher::new(sprintf('Tu correo electrónico ha sido activado con éxito <b>%s</b>, ya puedes iniciar sesión.', $nombre), 'success');
+      Redirect::to('login');
+
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::to('login');
+    } catch (PDOException $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::to('login');
     }
   }
 }

@@ -109,3 +109,27 @@ function format_estado_usuario($status)
 
   return sprintf($placeholder, $classes, $icon, $text);
 }
+
+function mail_confirmar_cuenta($id_usuario)
+{
+  if(!$usuario = usuarioModel::by_id($id_usuario)) return false; //nuevo método creado en el modelo
+
+  $nombre = $usuario['nombres'];
+  $hash = $usuario['hash'];
+  $email = $usuario['email'];
+  $status = $usuario['status'];
+
+  //si no es pendiente el estatus no requere activación
+  //if ($status !== 'pendiente') return false;
+
+  $subjet = sprintf('Confirma tu correo electrónico por favor %s', $nombre);
+  $alt = sprintf('Debes confirmar tu correo electrónico para poder ingresar a la plataforma.');
+  $url = buildURL(URL.'login/activate', ['email' => $email, 'hash' => $hash], false, false);
+  $text = '¡Hola %s!<br>Para ingresar al sistema de LVA primero debes confirmar tu dirección de correo electrónico dando clic en el siguiente enlace seguro: <a href="%s">%s</a>';
+  $body = sprintf($text, $nombre, $url, $url);
+
+  //Creando el correo electrónico
+  if (send_email(get_siteemail(), $email, $subjet, $body, $alt) !== true) return false;
+ 
+  return true;
+}

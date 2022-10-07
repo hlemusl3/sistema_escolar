@@ -343,7 +343,7 @@
                 <td class="wrapper">
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td align="center"><img src="<?php echo IMAGES.'bee_logo.png'; ?>" alt="<?php echo get_sitename(); ?>" style="width: 150px;"></td>
+                      <td align="center"><img src="<?php echo get_logo(); ?>" alt="<?php echo sprintf('Liceo Dr. Luis Von Ahn'); ?>" style="width: 150px;"></td>
                     </tr>
                   </table>
                 </td>
@@ -373,13 +373,10 @@
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="content-block">
-                    <span class="apple-link">Una calle en México #123, Dentro de una Colonia, CDMX, 87560</span>
+                    <span class="apple-link">11 Calle y 12 avenida, Puerto Barrios, Izabal</span>
+                    <!--
                     <br>¿No te gustan estos correos? <a href="https://github.com/Moxtrip69/Bee-Framework">Darse de baja</a>.
-                  </td>
-                </tr>
-                <tr>
-                  <td class="content-block powered-by">
-                    Creada por <a href="http://htmlemail.io">HTMLemail</a>.
+                    -->
                   </td>
                 </tr>
               </table>

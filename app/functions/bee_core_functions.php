@@ -746,14 +746,24 @@ function set_session($k, $v) {
  * @return void
  */
 function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $reply_to = null, $attachments = []) {
+	
 	$mail     = new PHPMailer(true);
 	$mail->isSMTP();
 	$template = 'emailTemplate';
-	
+	$mail->Host = 'smtp.gmail.com';
+	$mail->Port = 465;
+	$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+	$mail->SMTPAuth = true;
+
+
 	try {
 		$mail->CharSet = 'UTF-8';
+	
+		$email = 'mailerlva@gmail.com';
+		$mail->Username = $email;
+		$mail->Password = 'lonodyvcptwstkap';
 		// Remitente
-		$mail->setFrom($from, get_sitename());
+		$mail->setFrom($email, 'Liceo Dr. Luis Von Ahn');
 
 		// Destinatario
 		$mail->addAddress($to);
@@ -783,8 +793,9 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
 		$mail->Body    = get_module($template, ['alt' => $alt, 'body' => $body, 'subject' => $subject]);
 		$mail->AltBody = $alt;
 
-		$mail->send();
-		return true;
+		if(!$mail->send()) {
+			throw new Excepcion($email->ErrorInfo);
+		}
 
 	} catch (EmailException $e) {
 		throw new Exception($e->getMessage());
