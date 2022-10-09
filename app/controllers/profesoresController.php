@@ -46,7 +46,7 @@ class profesoresController extends Controller {
     [
       'title' => sprintf('Profesor #%s', $profesor['numero']),
       'slug' => 'profesores',
-      'button' => ['url' => 'profesores', 'text' => '<i class="fas fa-table"></i> Profesores'],
+      'button' => ['url' => 'profesores', 'text' => '<i class="fas fa-table"></i> Todos los Profesores'],
       'p' => $profesor
     ];
 

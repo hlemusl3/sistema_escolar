@@ -343,7 +343,7 @@
                 <td class="wrapper">
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td align="center"><img src="<?php echo get_logo(); ?>" alt="<?php echo sprintf('Liceo Dr. Luis Von Ahn'); ?>" style="width: 150px;"></td>
+                      <td align="center"><img src="<?php echo IMAGES.'logo_1000.png'; ?>" alt="<?php echo sprintf('Liceo Dr. Luis Von Ahn'); ?>" style="width: 150px;"></td>
                     </tr>
                   </table>
                 </td>

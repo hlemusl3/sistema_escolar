@@ -54,7 +54,7 @@ class materiasController extends Controller {
     [
       'title' => 'Agregar Materia',
       'slug' => 'materias',
-      'button' => ['url' => 'materias', 'text' => '<i class="fas fa-table"></i> Materias']
+      'button' => ['url' => 'materias', 'text' => '<i class="fas fa-table"></i> Todas las Materias']
     ];
 
     View::render('agregar' , $data);
