@@ -677,4 +677,101 @@ function get_materias_grupo() {
   })
 }
 get_materias_grupo();
+
+//Agregar nueva materia al grupo
+$('#grupo_asignar_materia_form').on('submit', add_materia_grupo);
+function add_materia_grupo(e) {
+  e.preventDefault();
+
+  var form = $('#grupo_asignar_materia_form'),
+  select = $('select', form),
+  id_mp = select.val(),
+  id_grupo = $('input[name="id_grupo"]', form).val(),
+  csrf = $('input[name="csrf"]', form).val(),
+  action = 'post',
+  hook = 'bee_hook';
+
+  if (id_mp === undefined || id_mp === '') {
+    toastr.error('Selecciona una materia válida.');
+    return;
+  }
+
+  //AJAX
+  $.ajax({
+    url: 'ajax/add_materia_grupo',
+    type: 'post',
+    dataType: 'json',
+    data: {
+      csrf,
+      id_mp,
+      id_grupo,
+      action,
+      hook
+    },
+    beforeSend: function() {
+      form.waitMe();
+    }
+  }).done(function(res) {
+    if(res.status === 201) {
+      toastr.success(res.msg);
+      get_materias_disponibles_grupo();
+      get_materias_grupo();
+
+    }else{
+      toastr.error(res.msg, '¡Upss!');
+    }
+  }).fail(function(err) {
+    toastr.error('Hubo un error en la petición 3.', '¡Upss!');
+  }).always(function() {
+    form.waitMe('hide');
+  })
+}
+
+//Quitar materia de grupo
+$('body').on('click', '.quitar_materia_grupo', quitar_materia_grupo);
+function quitar_materia_grupo(e) {
+  e.preventDefault();
+
+  var btn = $(this),
+  wrapper = $('.wrapper_materias_grupo'),
+  csrf = Bee.csrf,
+  id_mp = btn.data('id'),
+  id_grupo = wrapper.data('id'),
+  li = btn.closest('li'),
+  action = 'delete',
+  hook = 'bee_hook';
+
+  if(!confirm('¿Estás seguro?')) return false;
+  
+  $.ajax({
+    url: 'ajax/quitar_materia_grupo',
+    type: 'post',
+    dataType: 'json',
+    cache: false,
+    data: {
+      csrf,
+      id_mp,
+      id_grupo,
+      action,
+      hook
+    },
+    beforeSend: function() {
+      li.waitMe();
+    }
+  }).done(function(res) {
+    if(res.status === 200) {
+      toastr.success(res.msg, 'Bien!');
+      li.fadeOut();
+      get_materias_disponibles_grupo();
+      get_materias_grupo();
+    } else {
+      toastr.error(res.msg, '¡Upss!');
+    }
+  }).fail(function(err) {
+    toastr.error('Hubo un error en la petición', '¡Upss!');
+  }).always(function() {
+    li.waitMe('hide');
+  })
+}
+
 });

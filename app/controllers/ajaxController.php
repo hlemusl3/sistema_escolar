@@ -437,4 +437,83 @@ function add_materia_profesor()
       json_output(json_build(400, null, $e->getMessage()));
     }
   }
+
+  function add_materia_grupo()
+  {
+    try {
+      if (!check_posted_data(['csrf', 'id_grupo', 'id_mp'], $_POST) || !Csrf::validate($_POST["csrf"])) {
+        throw new Exception(get_notificaciones());      
+      }
+  
+      $id_grupo = clean($_POST["id_grupo"]);
+      $id_mp = clean($_POST["id_mp"]);
+  
+      if (!$grupo = grupoModel::by_id($id_grupo)) {
+        throw new Exception('No existe el grupo en la base de datos.');
+      }
+  
+      if (!$mp = materiaModel::list('materias_profesores', ['id' => $id_mp])) {
+        throw new Exception('No existe la materia en la base de datos.');
+      }
+  
+      // Validar que no este ya asignada la materia al grupo
+      if (grupoModel::list(grupoModel::$t2, ['id_mp' => $id_mp, 'id_grupo' => $id_grupo])) {
+        throw new Exception(sprintf('La materia ya está asignada al grupo <b>%s</b>.', $grupo['nombre']));
+      }
+  
+      //Asignar la materia al profesor
+      if (grupoModel::asignar_materia($id_grupo, $id_mp) === false) {
+        throw new Exception(get_notificaciones(2));
+      }
+  
+      $msg = sprintf('Nueva materia signada con éxito al grupo <b>%s</b>.', $grupo['nombre']);
+  
+      json_output(json_build(201, $grupo, $msg));
+  
+    } catch(Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    } catch(PDOException $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+  
+  function quitar_materia_grupo()
+  {
+    try {
+      if (!check_posted_data(['csrf', 'id_grupo', 'id_mp'], $_POST) || !Csrf::validate($_POST["csrf"])) {
+        throw new Exception(get_notificaciones());
+      }
+
+      $id_grupo = clean($_POST["id_grupo"]);
+      $id_mp = clean($_POST["id_mp"]);
+
+      if (!$grupo = grupoModel::by_id($id_grupo)) {
+        throw new Exception('No existe el grupo en la base de datos.');
+      }
+
+      if (!$mp = materiaModel::list('materias_profesores', ['id' => $id_mp])) {
+        throw new Exception('No existe la materia en la base de datos.');
+      }
+
+      // Validar que exista la materia asignada
+      if (!grupoModel::list(grupoModel::$t2, ['id_grupo' => $id_grupo, 'id_mp' => $id_mp])) {
+        throw new Exception(sprintf('La materia no está asignada al grupo <b>%s</b>.', $grupo['nombre']));
+      }
+
+      //Quitar materia asignada
+      if (grupoModel::quitar_materia($id_grupo, $id_mp) === false) {
+        throw new Exception(get_notificaciones(4));
+      }
+
+      $msg = sprintf('La materia ha sido removida del grupo <b>%s</b> con éxito.', $grupo['nombre']);
+
+      json_output(json_build(200, $grupo, $msg));
+    
+    } catch(Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    } catch(PDOException $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
 }

@@ -7,7 +7,8 @@
  * Modelo de grupo
  */
 class grupoModel extends Model {
-  public static $t1   = 'grupos'; // Nombre de la tabla en la base de datos;
+  public static $t1 = 'grupos'; // Nombre de la tabla en la base de datos;
+  public static $t2 = 'grupos_materias';
   
   // Nombre de tabla 2 que talvez tenga conexión con registros
   //public static $t2 = '__tabla 2___'; 
@@ -88,6 +89,30 @@ class grupoModel extends Model {
       )';
 
     return ($rows = parent::query($sql, ['id_grupo' => $id])) ? $rows : [];
+  }
+
+  static function asignar_materia($id_grupo, $id_mp)
+  {
+    $data = 
+    [
+      'id_grupo' => $id_grupo,
+      'id_mp' =>  $id_mp
+    ];
+  
+    if (!$id = self::add(self::$t2, $data)) return false;
+  
+    return $id;
+  }
+
+  static function quitar_materia($id_grupo, $id_mp)
+  {
+    $data = 
+    [
+      'id_grupo' => $id_grupo,
+      'id_mp' => $id_mp
+    ];
+
+    return (self::remove(self::$t2, $data)) ? true : false;
   }
 }
 
