@@ -1,5 +1,5 @@
 <?php if (!empty($d)): ?>
-    <div for="materia">Materias asignadas<div>
+    <div for="materia">Materias asignadas</div>
     <ul class="list-group">
         <?php foreach ($d as $m): ?>
             <?php echo sprintf('<li class="list-group-item">%s <button class="btn btn-danger btn-sm float-right quitar_materia_profesor" 

@@ -38,5 +38,56 @@ class grupoModel extends Model {
     $sql = 'SELECT * FROM grupos WHERE id = :id LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
+
+  static function materias_disponibles($id)
+  {
+    $sql = 
+    'SELECT
+      mp.id,
+      m.nombre AS materia,
+      u.nombres AS profesor
+    FROM
+      materias_profesores mp
+    LEFT JOIN materias m ON m.id = mp.id_materia
+    LEFT JOIN usuarios u ON u.id = mp.id_profesor
+    WHERE
+      mp.id NOT IN (
+        SELECT
+          gm.id_mp
+        FROM
+          grupos_materias gm
+        WHERE
+          gm.id_grupo = :id_grupo
+      )';
+
+    return ($rows = parent::query($sql, ['id_grupo' => $id])) ? $rows : [];
+  }
+
+  static function materias_asignadas($id)
+  {
+    $sql = 
+    'SELECT
+      mp.id,
+      m.id AS id_materia,
+      m.nombre AS materia,
+      u.id AS id_profesor,
+      u.numero AS num_profesor,
+      u.nombres AS profesor
+    FROM
+      materias_profesores mp
+    LEFT JOIN materias m ON m.id = mp.id_materia
+    LEFT JOIN usuarios u ON u.id = mp.id_profesor
+    WHERE
+      mp.id IN (
+        SELECT
+          gm.id_mp
+        FROM
+          grupos_materias gm
+        WHERE
+          gm.id_grupo = :id_grupo
+      )';
+
+    return ($rows = parent::query($sql, ['id_grupo' => $id])) ? $rows : [];
+  }
 }
 

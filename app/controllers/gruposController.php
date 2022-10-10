@@ -32,7 +32,20 @@ class gruposController extends Controller {
 
   function ver($id)
   {
-    View::render('ver');
+    if(!$grupo = grupoModel::by_id($id)){
+      Flasher::new('No existe el grupo en la base de datos.', 'danger');
+      Redirect::back();
+    }
+
+    $data =
+    [
+      'title' => sprintf('Grupo %s', $grupo['nombre']),
+      'slug' => 'grupos',
+      'button' => ['url' => 'grupos', 'text' => '<i class="fas fa-table"></i> Todos los Grupos'],
+      'g' => $grupo
+    ];
+
+    View::render('ver', $data);
   }
 
   function agregar()
@@ -100,13 +113,57 @@ class gruposController extends Controller {
 
   }
 
-  function editar($id)
-  {
-    View::render('editar');
-  }
-
   function post_editar()
   {
+    try {
+      if(!check_posted_data(['csrf','id','nombre', 'descripcion'], $_POST) || !Csrf::validate($_POST['csrf'])){
+        throw new Exception(get_notificaciones());
+      }
+
+      //validar rol
+      if(!is_admin(get_user_role())){
+        throw new Exception(get_notificaciones(1));
+      }
+      
+      $id = clean($_POST["id"]);
+      $nombre = clean($_POST["nombre"]);
+      $descripcion = clean($_POST["descripcion"]);
+
+      if(!$grupo = grupoModel::by_id($id)){
+        throw new Exception('No existe el grupo en la base de datos.', 1);
+      }
+      //validad la longitud del nombre
+      if(strlen($nombre)<5){
+        throw new Exception('El nombre del grupo es demasiado corto.');
+      }
+
+      //validar que el nombre del grupo no exista en la base de datos
+      $sql = 'SELECT * FROM grupos WHERE id != :id AND nombre = :nombre LIMIT 1';
+      if (grupoModel::query($sql, ['id' => $id, 'nombre' => $nombre])){
+        throw new Exception(sprintf('Ya existe el grupo <b>%s</b> en la base de datos.', $nombre));
+      }
+
+      $data = 
+      [
+        'nombre' => $nombre,
+        'descripcion' => $descripcion,
+      ];
+
+      //Actualizar en la base de datos
+      if(!grupoModel::update(grupoModel::$t1, ['id' => $id], $data)){
+        throw new Exception(get_notificaciones(3));
+      }
+
+      Flasher::new(sprintf('Grupo <b>%s</b> actualizado con éxito.', $nombre), 'success');
+      Redirect::back();
+
+    } catch (PDOException $e) { //Excepciones de errores por la db
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    }
 
   }
 

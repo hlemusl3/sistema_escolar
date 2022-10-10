@@ -432,6 +432,7 @@ function get_materias_disponibles_profesor(){
       $('button', form).attr('disabled', false);
 
     } else {
+      select.html('<option disabled selected>No hay opciones disponibles.</option>')
       $('button', form).attr('disabled', true);
       toastr.error(res.msg, '¡Upss!');
     }
@@ -536,7 +537,6 @@ function add_materia_profesor(e) {
 $('body').on('click', '.quitar_materia_profesor', quitar_materia_profesor);
 function quitar_materia_profesor(e) {
   e.preventDefault();
-
   var btn = $(this),
   wrapper = $('.wrapper_materias_profesor'),
   csrf = Bee.csrf,
@@ -545,9 +545,7 @@ function quitar_materia_profesor(e) {
   li = btn.closest('li'),
   action = 'delete',
   hook = 'bee_hook';
-
   if(!confirm('¿Estás seguro?')) return false;
-
   $.ajax({
     url: 'ajax/quitar_materia_profesor',
     type: 'post',
@@ -578,4 +576,105 @@ function quitar_materia_profesor(e) {
     li.waitMe('hide');
   })
 }
+
+
+//Cargar materias disponibles para grupo
+function get_materias_disponibles_grupo() {
+  
+  var form = $('#grupo_asignar_materia_form'),
+  select = $('select', form),
+  id_grupo = $('input[name="id_grupo"]', form).val(),
+  wrapper = $('.wrapper_materias_grupo'),
+  opciones = '',
+  _t = Bee.csrf,
+  action = 'get',
+  hook = 'bee_hook';
+
+  if (form.length == 0) return;
+
+  //Limpiar las opciones al cargar
+  select.html('');
+
+  // AJAX
+  $.ajax({
+    url: 'ajax/get_materias_disponibles_grupo',
+    type: 'get',
+    dataType: 'json',
+    data: {
+      _t,
+      id_grupo,
+      action,
+      hook
+    },
+    beforeSend: function() {
+      wrapper.waitMe();
+    }
+  }).done(function(res) {
+    if(res.status === 200) {
+      if(res.data.length === 0) {
+        select.html('<option disabled selected>No hay opciones disponibles.</option>')
+        $('button', form).attr('disabled', true);
+        return;
+      }
+
+      $.each(res.data, function(i, m) {
+        opciones +='<option value="'+m.id+'">'+m.materia+' impartida por '+m.profesor+'</option>';
+      });
+
+      select.html(opciones);
+      $('button', form).attr('disabled', false);
+
+    }else{
+      select.html('<option disabled selected>No hay opciones disponibles.</option>')
+      $('button', form).attr('disabled', true);
+      toastr.error(res.msg, '¡Upss!');
+    }
+  }).fail(function(err) {
+    toastr.error('Hubo un error con la petición.', '¡Upss!');
+  }).always(function() {
+    wrapper.waitMe('hide');
+  })
+}
+get_materias_disponibles_grupo();
+
+
+//Función para cargar las materias de un grupo
+function get_materias_grupo() {
+
+  var wrapper = $('.wrapper_materias_grupo'),
+  id_grupo = wrapper.data('id'),
+  _t = Bee.csrf,
+  action = 'get',
+  hook = 'bee_hook';
+
+  if (wrapper.length == 0) return;
+
+  //AJAX
+  $.ajax({
+    url: 'ajax/get_materias_grupo',
+    type: 'get',
+    dataType: 'json',
+    data: {
+      _t,
+      id_grupo,
+      action,
+      hook
+    },
+    beforeSend: function() {
+      wrapper.waitMe();
+    }
+  }).done(function(res) {
+    if(res.status === 200) {
+      wrapper.html(res.data);
+    } else {
+      wrapper.html(res.msg);
+      toastr.error(res.msg, '¡Upss!');
+    }
+  }).fail(function(err) {
+    toastr.error('Hubo un error en la petición.', '¡Upss!');
+  }).always(function() {
+    wrapper.waitMe('hide');
+  })
+}
+get_materias_grupo();
 });
