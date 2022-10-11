@@ -774,4 +774,173 @@ function quitar_materia_grupo(e) {
   })
 }
 
+//Función para cargar los alumnos de grupo
+function get_alumnos_grupo() {
+
+  var wrapper = $('.wrapper_alumnos_grupo'),
+  id_grupo = wrapper.data('id'),
+  _t = Bee.csrf,
+  action = 'get',
+  hook = 'bee_hook';
+
+  if (wrapper.length == 0) return;
+
+  //AJAX
+  $.ajax({
+    url: 'ajax/get_alumnos_grupo',
+    type: 'get',
+    dataType: 'json',
+    data: {
+      _t,
+      id_grupo,
+      action,
+      hook
+    },
+    beforeSend: function() {
+      wrapper.waitMe();
+    }
+  }).done(function(res) {
+    if(res.status === 200) {
+      wrapper.html(res.data);
+    } else {
+      wrapper.html(res.msg);
+      toastr.error(res.msg, '¡Upss!');
+    }
+  }).fail(function(err) {
+    toastr.error('Hubo un error en la petición.', '¡Upss!');
+  }).always(function() {
+    wrapper.waitMe('hide');
+  })
+}
+get_alumnos_grupo();
+
+// Quitar alumno de grupo
+$('body').on('click', '.quitar_alumno_grupo', quitar_alumno_grupo);
+function quitar_alumno_grupo(e) {
+  e.preventDefault();
+
+  var btn = $(this),
+  wrapper = $('.wrapper_alumnos_grupo'),
+  csrf = Bee.csrf,
+  id_alumno = btn.data('id'),
+  id_grupo = wrapper.data('id'),
+  li = btn.closest('li'),
+  action = 'delete',
+  hook = 'bee_hook';
+
+  if(!confirm('¿Estás seguro?')) return false;
+  
+  $.ajax({
+    url: 'ajax/quitar_alumno_grupo',
+    type: 'post',
+    dataType: 'json',
+    cache: false,
+    data: {
+      csrf,
+      id_alumno,
+      id_grupo,
+      action,
+      hook
+    },
+    beforeSend: function() {
+      li.waitMe();
+    }
+  }).done(function(res) {
+    if(res.status === 200) {
+      toastr.success(res.msg, 'Bien!');
+      li.fadeOut();
+      get_alumnos_grupo();
+    } else {
+      toastr.error(res.msg, '¡Upss!');
+    }
+  }).fail(function(err) {
+    toastr.error('Hubo un error en la petición', '¡Upss!');
+  }).always(function() {
+    li.waitMe('hide');
+  })
+}
+
+// Suspender Alumno
+$('body').on('click', '.suspender_alumno', suspender_alumno);
+function suspender_alumno(e) {
+  e.preventDefault();
+
+  var btn = $(this),
+  csrf = Bee.csrf,
+  id_alumno = btn.data('id'),
+  action = 'put',
+  hook = 'bee_hook';
+
+  if(!confirm('¿Estás seguro?')) return false;
+  
+  $.ajax({
+    url: 'ajax/suspender_alumno',
+    type: 'post',
+    dataType: 'json',
+    cache: false,
+    data: {
+      csrf,
+      id_alumno,
+      action,
+      hook
+    },
+    beforeSend: function() {
+      $('body').waitMe();
+    }
+  }).done(function(res) {
+    if(res.status === 200) {
+      toastr.success(res.msg, 'Bien!');
+      get_alumnos_grupo();
+    } else {
+      toastr.error(res.msg, '¡Upss!');
+    }
+  }).fail(function(err) {
+    toastr.error('Hubo un error en la petición', '¡Upss!');
+  }).always(function() {
+    $('body').waitMe('hide');
+  })
+}
+
+// Remover suspension Alumno
+$('body').on('click', '.remover_suspension_alumno', remover_suspension_alumno);
+function remover_suspension_alumno(e) {
+  e.preventDefault();
+
+  var btn = $(this),
+  csrf = Bee.csrf,
+  id_alumno = btn.data('id'),
+  action = 'put',
+  hook = 'bee_hook';
+
+  if(!confirm('¿Estás seguro?')) return false;
+  
+  $.ajax({
+    url: 'ajax/remover_suspension_alumno',
+    type: 'post',
+    dataType: 'json',
+    cache: false,
+    data: {
+      csrf,
+      id_alumno,
+      action,
+      hook
+    },
+    beforeSend: function() {
+      $('body').waitMe();
+    }
+  }).done(function(res) {
+    if(res.status === 200) {
+      toastr.success(res.msg, 'Bien!');
+      get_alumnos_grupo();
+    } else {
+      toastr.error(res.msg, '¡Upss!');
+    }
+  }).fail(function(err) {
+    toastr.error('Hubo un error en la petición', '¡Upss!');
+  }).always(function() {
+    $('body').waitMe('hide');
+  })
+}
+
+
 });

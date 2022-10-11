@@ -794,7 +794,7 @@ function send_email($from, $to, $subject, $body, $alt = null, $bcc = null, $repl
 		$mail->AltBody = $alt;
 
 		if(!$mail->send()) {
-			throw new Excepcion($email->ErrorInfo);
+			throw new Exception($mail->ErrorInfo);
 		}
 
 	} catch (EmailException $e) {

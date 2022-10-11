@@ -1,6 +1,7 @@
 <?php require_once INCLUDES.'inc_header.php'; ?>
 
 <div class="row">
+    <!-- Información del grupo -->
     <div class="col-xl-4 col-md-6 col-12">
         <!-- Collapsable Card Example -->
         <div class="card shadow mb-4">
@@ -66,6 +67,7 @@
         </div>
     </div>
 
+    <!-- Materias y profesores-->
     <div class="col-xl-4 col-md-6 col-12">
         <!-- Collapsable Card Example -->
         <div class="card shadow mb-4">
@@ -94,6 +96,26 @@
                         <hr>
 
                         <div class="wrapper_materias_grupo" data-id="<?php echo $d->g->id; ?>"><!-- agregar con Ajax la lista de materias --></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alumnos del grupo -->
+    <div class="col-xl-4 col-md-6 col-12">
+        <!-- Collapsable Card Example -->
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#grupo_alumnos" class="d-block card-header py-3" data-toggle="collapse"
+                role="button" aria-expanded="true" aria-controls="grupo_alumnos">
+                <h6 class="m-0 font-weight-bold text-primary">Alumno inscritos</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse show" id="grupo_alumnos">
+                <div class="card-body">
+                    <div class="wrapper_alumnos_grupo" data-id="<?php echo $d->g->id; ?>">
+                        <!-- ajax filled -->
+                    </div>
                 </div>
             </div>
         </div>

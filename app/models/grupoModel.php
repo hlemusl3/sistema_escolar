@@ -9,6 +9,7 @@
 class grupoModel extends Model {
   public static $t1 = 'grupos'; // Nombre de la tabla en la base de datos;
   public static $t2 = 'grupos_materias';
+  public static $t3 = 'grupos_alumnos';
   
   // Nombre de tabla 2 que talvez tenga conexión con registros
   //public static $t2 = '__tabla 2___'; 
@@ -114,5 +115,33 @@ class grupoModel extends Model {
 
     return (self::remove(self::$t2, $data)) ? true : false;
   }
+
+  static function alumnos_asignados($id_grupo)
+  {
+    $sql = 
+    'SELECT
+      u.*
+    FROM
+      usuarios u
+    JOIN grupos_alumnos ga ON u.id = ga.id_alumno
+    JOIN grupos g ON g.id = ga.id_grupo
+    WHERE
+      g.id = :id
+    AND u.rol = "alumno"';
+
+    return ($rows = parent::query($sql, ['id' => $id_grupo])) ? $rows : [];
+  }
+
+  static function quitar_alumno($id_grupo, $id_alumno)
+  {
+    $data = 
+    [
+      'id_grupo' => $id_grupo,
+      'id_alumno' => $id_alumno
+    ];
+
+    return (self::remove(self::$t3, $data)) ? true : false;
+  }
+
 }
 
