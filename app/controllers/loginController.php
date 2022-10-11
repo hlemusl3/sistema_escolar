@@ -62,7 +62,7 @@ class loginController extends Controller {
       Flasher::new($e->getMessage(), 'danger');
       Redirect::back();
     }catch(PDOException $e){
-      Flassher::new($e->getMessage(), 'danger');
+      Flasher::new($e->getMessage(), 'danger');
       Redirect::back();    
     }
   }

@@ -12,7 +12,7 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="grupo_data">
                 <div class="card-body">
-                        <form action="grupos/post_editar" method="post">
+                        <form action="grupos/post_editar" method="post" enctype="multipart/form-data">
                             <?php echo insert_inputs();?>
                             <input type="hidden" name="id" value="<?php echo $d->g->id; ?>" required>
                             
@@ -26,8 +26,41 @@
                                 <textarea name="descripcion" id="descripcion" cols="10" rows="5" class="form-control"><?php echo $d->g->descripcion; ?></textarea>
                             </div>
 
+                            <div class="form-group">
+                                <div for="horario">Horario de Clases</div>
+                                <input type="file" class="form-control" id="horario" name="horario" accept="image/png, image/jpeg, image/gif">
+                            </div>
+
                             <button class="btn btn-success" type="submit">Guardar cambios</button>
                         </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horario -->
+        <div class="card shadow mb-4">
+            <!-- Card Header - Accordion -->
+            <a href="#grupo_horario" class="d-block card-header py-3" data-toggle="collapse"
+                role="button" aria-expanded="true" aria-controls="grupo_horario">
+                <h6 class="m-0 font-weight-bold text-primary">Horario de Clases</h6>
+            </a>
+            <!-- Card Content - Collapse -->
+            <div class="collapse show" id="grupo_horario">
+                <div class="card-body">
+                    <?php if ($d->g->horario !== null ): ?>
+                        <?php if (is_file(UPLOADS.$d->g->horario)): ?>
+                            <a href="<?php echo UPLOADED.$d->g->horario; ?>" data-lightbox="Horario" title="<?php echo sprintf('Horario del grupo %s', $d->g->nombre); ?>">
+                                <img src="<?php echo UPLOADED.$d->g->horario; ?>" alt="<?php echo sprintf('Horario del grupo %s', $d->g->nombre); ?>" class="img-fluid img-thumbnail">
+                            </a>
+                        <?php else: ?>
+                            <a href="<?php echo get_image('broken.png'); ?>" data-lightbox="Horario" title="<?php echo sprintf('Horario del grupo %s', $d->g->nombre); ?>">
+                                <img src="<?php echo get_image('broken.png'); ?>" alt="<?php echo sprintf('Horario del grupo %s', $d->g->nombre); ?>" class="img-fluid img-thumbnail">
+                            </a>
+                            <p class="text-muted"><?php echo sprintf('El archivo <b>%s</b> no existe o está dañado.', $d->g->horario); ?></p>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        No hay un horario definido aún para este grupo.
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -66,4 +99,5 @@
         </div>
     </div>
 </div>
+
 <?php require_once INCLUDES.'inc_footer.php'; ?>

@@ -1,4 +1,5 @@
 <?php
+use \Verot\Upload\Upload;
 
 /**
  * Plantilla general de controladores
@@ -112,7 +113,6 @@ class gruposController extends Controller {
     }
 
   }
-
   function post_editar()
   {
     try {
@@ -128,10 +128,15 @@ class gruposController extends Controller {
       $id = clean($_POST["id"]);
       $nombre = clean($_POST["nombre"]);
       $descripcion = clean($_POST["descripcion"]);
+      $horario = $_FILES["horario"];
+      $n_horario = false;
 
       if(!$grupo = grupoModel::by_id($id)){
-        throw new Exception('No existe el grupo en la base de datos.', 1);
+        throw new Exception('No existe el grupo en la base de datos.');
       }
+
+      $db_horario = $grupo['horario'];
+
       //validad la longitud del nombre
       if(strlen($nombre)<5){
         throw new Exception('El nombre del grupo es demasiado corto.');
@@ -149,9 +154,46 @@ class gruposController extends Controller {
         'descripcion' => $descripcion,
       ];
 
+      // Validar si se está subiendo una imagen
+      if ($horario['error'] !== 4) {
+        $tmp = $horario['tmp_name'];
+        $name = $horario['name'];
+        $ext = pathinfo($name, PATHINFO_EXTENSION);
+
+        // Validar extensión del archivo
+        if (!in_array($ext, ['jpg', 'png', 'jpeg', 'bmp'])) {
+          throw new Exception('Selecciona un formato de imagen válido.');
+        }
+
+        $foo = new upload($horario);
+        if (!$foo->uploaded) {
+          throw new Exception('Hubo un problema al subir el archivo.');
+        }
+
+        //Nuevo nombre y nuevas medidas de la imagen
+        $filename = generate_filename();
+        $foo->file_new_name_body = $filename;
+        $foo->image_resize = true;
+        $foo->image_x = 800;
+        $foo->image_ratio_y = true;
+
+        $foo->process(UPLOADS);
+        if (!$foo->processed) {
+          throw new Exception('Hubo un error al guardar la imagen en el servidor.');
+        }
+
+        $data['horario'] = sprintf('%s.%s', $filename, $ext);
+        $n_horario = true;
+      }
+
       //Actualizar en la base de datos
       if(!grupoModel::update(grupoModel::$t1, ['id' => $id], $data)){
         throw new Exception(get_notificaciones(3));
+      }
+
+      //Borrado del horario anterior en caso de actualización
+      if ($db_horario !== null && $n_horario === true && is_file(UPLOADS.$db_horario)) {
+        unlink(UPLOADS.$db_horario);
       }
 
       Flasher::new(sprintf('Grupo <b>%s</b> actualizado con éxito.', $nombre), 'success');

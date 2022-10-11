@@ -1,7 +1,7 @@
 <?php
 
-//////////////////////////////// 2021
-//////////////////////////////// Joystick
+//////////////////////////////// 2022
+//////////////////////////////// Hugo Miguel Lemus Lima
 //////////////////////////////// Bee-Framework
 
 // Definir el uso horario o timezone del sistema
@@ -16,7 +16,7 @@ define('SITE_LANG'   , $this->lng);
 // Versión de la aplicación
 define('BEE_NAME'    , $this->framework); // Viene desde Bee.php
 define('BEE_VERSION' , $this->version);   // Viene desde Bee.php
-define('SITE_NAME'   , 'Aprende');    // Nombre del sitio
+define('SITE_NAME'   , 'LVA Campus Virtual');    // Nombre del sitio
 define('SITE_VERSION', '1.0.0');          // Versión del sitio
 
 // Ruta base de nuestro proyecto
