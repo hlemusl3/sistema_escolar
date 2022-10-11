@@ -75,4 +75,24 @@ class materiaModel extends Model {
       )';
       return ($rows = parent::query($sql, ['id_profesor' => $id_profesor])) ? $rows : [];
   }
+
+  static function materias_grupo($id_grupo)
+  {
+    $sql = 
+    'SELECT
+      m.*
+    FROM
+      materias m
+    WHERE
+      m.id IN (
+        SELECT
+          mg.id_materia
+        FROM
+          grupos_materias mg
+        WHERE
+          mg.id_grupo = :id_grupo
+      )';
+      return ($rows = parent::query($sql, ['id_grupo' => $id_grupo])) ? $rows : [];
+  }
+
 }

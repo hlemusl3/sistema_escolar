@@ -143,5 +143,40 @@ class grupoModel extends Model {
     return (self::remove(self::$t3, $data)) ? true : false;
   }
 
+  static function eliminar($id_grupo)
+  {
+    $sql = 
+    'DELETE g, gm, ga FROM grupos g
+    JOIN grupos_materias gm ON gm.id_grupo = g.id
+    JOIN grupos_alumnos ga ON ga.id_grupo = g.id
+    WHERE g.id = :id';
+    return (parent::query($sql, ['id' => $id_grupo])) ? true : false;
+  }
+
+  static function eliminar_grupo_y_alumnos($id_grupo)
+  {
+    $sql = 
+    'DELETE g, ga FROM grupos g
+    JOIN grupos_alumnos ga ON ga.id_grupo = g.id
+    WHERE g.id = :id';
+    return (parent::query($sql, ['id' => $id_grupo])) ? true : false;
+  }
+
+  static function eliminar_solo_grupo($id_grupo)
+  {
+    $sql = 'DELETE g FROM grupos g WHERE g.id = :id ';
+    return (parent::query($sql, ['id' => $id_grupo])) ? true: false;
+  }
+
+  static function eliminar_grupo_y_clases($id_grupo)
+  {
+    $sql = 
+    'DELETE g, gm FROM grupos g
+    JOIN grupos_materias gm ON gm.id_grupo = g.id
+    WHERE g.id = :id';
+    return (parent::query($sql, ['id' => $id_grupo])) ? true : false;
+  }
+
+
 }
 

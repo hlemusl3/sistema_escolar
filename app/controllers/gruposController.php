@@ -211,6 +211,56 @@ class gruposController extends Controller {
 
   function borrar($id)
   {
-    // Proceso de borrado 
+    try {
+      if(!check_get_data(['_t'], $_GET) || !Csrf::validate($_GET['_t'])){
+        throw new Exception(get_notificaciones(0));
+      }
+
+      //validar rol
+      if(!is_admin(get_user_role())){
+        throw new Exception(get_notificaciones(1));
+      }
+
+      // Exista el grupo
+         if(!$grupo = grupoModel::by_id($id)) {
+        throw new Exception('No existe el grupo en la base de datos.');
+      }
+
+      //Borramos el registro y sus conexiones
+      if (grupoModel::eliminar($grupo['id']) === false ) {
+        throw new Exception(get_notificaciones(4));
+      }
+
+      //Borramos el grupo y sus alumnos
+      if (grupoModel::eliminar_grupo_y_alumnos($grupo['id']) === false ) {
+        throw new Exception(get_notificaciones(4));
+      }
+
+        //Borramos el grupo y sus clases
+      if (grupoModel::eliminar_grupo_y_clases($grupo['id']) === false ) {
+        throw new Exception(get_notificaciones(4));
+      }
+
+      //Borrar la imagen del horario
+      if (is_file(UPLOADS.$grupo['horario'])) {
+        unlink(UPLOADS.$grupo['horario']);
+      }
+
+      //Borramos solo grupo
+      if (grupoModel::eliminar_solo_grupo($grupo['id']) === false ) {
+        throw new Exception(get_notificaciones(4));
+      }
+
+      Flasher::new(sprintf('Grupo <b>%s</b> borrado con éxito.', $grupo['nombre']), 'success');
+      Redirect::to('grupos');
+
+    } catch (PDOException $e) { //Excepciones de errores por la db
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    }
+
   }
 }
