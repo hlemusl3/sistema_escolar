@@ -867,6 +867,7 @@ function suspender_alumno(e) {
 
   var btn = $(this),
   csrf = Bee.csrf,
+  view = btn.data('view'),
   id_alumno = btn.data('id'),
   action = 'put',
   hook = 'bee_hook';
@@ -890,6 +891,11 @@ function suspender_alumno(e) {
   }).done(function(res) {
     if(res.status === 200) {
       toastr.success(res.msg, 'Bien!');
+      if(view === 'alumnos') {
+        window.location.reload();
+        return false;
+      }
+
       get_alumnos_grupo();
     } else {
       toastr.error(res.msg, '¡Upss!');
@@ -908,6 +914,7 @@ function remover_suspension_alumno(e) {
 
   var btn = $(this),
   csrf = Bee.csrf,
+  view = btn.data('view'),
   id_alumno = btn.data('id'),
   action = 'put',
   hook = 'bee_hook';
@@ -931,6 +938,11 @@ function remover_suspension_alumno(e) {
   }).done(function(res) {
     if(res.status === 200) {
       toastr.success(res.msg, 'Bien!');
+      if(view === 'alumnos') {
+        window.location.reload();
+        return false;
+      }
+      
       get_alumnos_grupo();
     } else {
       toastr.error(res.msg, '¡Upss!');

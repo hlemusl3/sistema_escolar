@@ -43,7 +43,7 @@
 
                             <div class="form-group">
                                 <div for="password">Contraseña</div>
-                                <input type="password" class="form-control" id="password" name="password">
+                                <input type="password" class="form-control" id="password" name="password" required>
                             </div>
 
                             <div class="form-group">

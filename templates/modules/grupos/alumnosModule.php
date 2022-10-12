@@ -8,6 +8,7 @@
                         <button class="btn btn-warning text-dark btn-sm remover_suspension_alumno" data-id="<?php echo $a->id; ?>"><i class="fas fa-undo"></i></button>
                     <?php else: ?>
                         <?php if($a->status === 'pendiente'): ?>
+                            <button class="btn btn-danger btn-sm suspender_alumno" data-id="<?php echo $a->id; ?>" disabled><i class="fas fa-ban"></i></button>
                         <?php else: ?>
                             <button class="btn btn-danger btn-sm suspender_alumno" data-id="<?php echo $a->id; ?>"><i class="fas fa-ban"></i></button>
                         <?php endif; ?>

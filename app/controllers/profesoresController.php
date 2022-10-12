@@ -27,7 +27,7 @@ class profesoresController extends Controller {
     [
       'title' => 'Todos los profesores',
       'slug' => 'profesores',
-      'button' => ['url' => buildURL('profesores/agregar'), 'text' => '<i class="fas fa-plus"></i> Agregar profesores'],
+      'button' => ['url' => buildURL('profesores/agregar'), 'text' => '<i class="fas fa-plus"></i> Agregar profesor'],
       'profesores' => profesorModel::all_paginated()
     ];
     
@@ -126,6 +126,11 @@ class profesoresController extends Controller {
       //Validar que el correo sea válido
       if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
         throw new Exception('Ingresa un correo electrónico válido.');
+      }
+
+      //Validar que el correo no lo tenga otro usuario
+      if(usuarioModel::by_email($email)) {
+      throw new Exception('El correo electrónico ya está en uso.');
       }
       
       $data = 
