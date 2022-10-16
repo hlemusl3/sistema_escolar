@@ -81,4 +81,58 @@ static function asignar_materia($id_profesor, $id_materia)
     $sql = 'DELETE u FROM usuarios u WHERE u.id = :id AND u.rol = "profesor"';
     return (parent::query($sql, ['id' => $id_profesor])) ? true: false;
   }
+
+  static function stats_by_id($id_profesor)
+  {
+    $materias = 0;
+    $grupos = 0;
+    $alumnos = 0;
+    $lecciones = 0;
+
+    $sql = 
+    'SELECT
+      COUNT(DISTINCT m.id) AS total
+    FROM
+      materias m
+    JOIN materias_profesores mp ON mp.id_materia = m.id
+    WHERE
+      mp.id_profesor = :id';
+    $materias = parent::query($sql, ['id' => $id_profesor])[0]['total'];
+
+    $sql = 
+    'SELECT
+      COUNT(DISTINCT g.id) AS total
+    FROM
+      grupos g
+    JOIN grupos_materias gm ON gm.id_grupo = g.id
+    JOIN materias_profesores mp ON mp.id = gm.id_mp
+    WHERE
+      mp.id_profesor = :id';
+    $grupos = parent::query($sql, ['id' => $id_profesor])[0]['total'];
+
+    $sql = 
+    'SELECT
+      COUNT(DISTINCT a.id) AS total
+    FROM
+      usuarios a
+    JOIN grupos_alumnos ga ON ga.id_alumno = a.id
+    JOIN grupos g ON g.id = ga.id_grupo
+    JOIN grupos_materias gm ON gm.id_grupo = g.id
+    JOIN materias_profesores mp ON mp.id = gm.id_mp
+    WHERE
+      mp.id_profesor = :id';
+    $alumnos = parent::query($sql, ['id' => $id_profesor])[0]['total'];
+
+    $sql = 'SELECT COUNT(l.id) AS total FROM lecciones l WHERE l.id_profesor = :id';
+    $lecciones = parent::query($sql, ['id' => $id_profesor])[0]['total'];
+
+    return
+    [
+      'materias' => $materias,
+      'grupos' => $grupos,
+      'alumnos' => $alumnos,
+      'lecciones' => $lecciones
+    ];
+  }
+
 }

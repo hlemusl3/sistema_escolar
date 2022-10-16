@@ -16,7 +16,6 @@
             <hr class="sidebar-divider my-0">
 
 <?php $rol = get_user_role(); ?>
-<?php $rol = 'profesor'; ?>
             <?php if (is_admin($rol)): ?>
                 <?php require_once INCLUDES.'inc_sidebar_admin.php';?>
             <?php elseif(is_profesor($rol)): ?>
