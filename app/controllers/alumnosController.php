@@ -313,7 +313,6 @@ class alumnosController extends Controller {
       Flasher::new($e->getMessage(), 'danger');
       Redirect::back();
     }
-
   }
 
   function borrar($id)
@@ -353,6 +352,5 @@ class alumnosController extends Controller {
       Flasher::new($e->getMessage(), 'danger');
       Redirect::back();
     }
-
   }
 }

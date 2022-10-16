@@ -197,14 +197,13 @@ class profesoresController extends Controller {
             }
               Flasher::new(sprintf('Profesor <b>%s</b> borrado con éxito.', $profesor['nombre_completo']), 'success');
               Redirect::to('profesores');
-      
         }
 
       //Borramos el registro y sus conexiones
       if (profesorModel::eliminar($profesor['id']) === false ) {
         throw new Exception(get_notificaciones(4));
       }
-
+      
       Flasher::new(sprintf('Profesor <b>%s</b> borrado con éxito.', $profesor['nombre_completo']), 'success');
       Redirect::to('profesores');
 
