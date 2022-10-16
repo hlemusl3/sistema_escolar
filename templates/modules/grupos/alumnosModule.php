@@ -26,7 +26,6 @@
                         <span class="badge badge-pill badge-success text-white">Activo</span>
                     <?php endif;?>
                 <?php endif; ?>
-
         </li>
         <?php endforeach; ?>
     </ul>
