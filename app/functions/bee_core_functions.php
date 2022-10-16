@@ -60,7 +60,7 @@ function get_bee_version()
  * @return string
  */
 function get_siteemail() {
-  return 'jslocal@localhost.com';
+  return 'mailerlva@gmail.com';
 }
 
 /**

@@ -93,6 +93,11 @@ class loginController extends Controller {
       throw new Exception('Confirma tu dirección de correo electrónico.');
     }
 
+    // Validar el status del usuario
+    if ($user['status'] === 'suspendido') {
+      throw new Exception('Te informamos que tu cuenta ha sido suspendida, regulariza tu situación para poder ingresar de nuevo a LVA Campus Virtual.');
+    }
+
     // Loggear al usuario
     Auth::login($user['id'], $user);
     Redirect::to('dashboard');      
@@ -248,6 +253,4 @@ class loginController extends Controller {
       Redirect::back();
     }
   }
-
-
 }

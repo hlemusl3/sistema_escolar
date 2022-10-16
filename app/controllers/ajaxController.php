@@ -605,6 +605,9 @@ function add_materia_profesor()
         throw new Exception(get_notificaciones(4));
       }
 
+      // Email de suspención
+      mail_suspencion_cuenta($id_alumno);
+
       $msg = sprintf('El alumno <b>%s</b> ha sido suspendido con éxito.', $alumno['nombre_completo']);
 
       json_output(json_build(200, $alumno, $msg));
@@ -643,6 +646,9 @@ function add_materia_profesor()
       if (alumnoModel::remover_suspension($id_alumno) === false) {
         throw new Exception(get_notificaciones(4));
       }
+
+      //Email de retirar suspencion
+      mail_retirar_suspencion_cuenta($id_alumno);
 
       $msg = sprintf('Se ha retirado la suspensión del alumno <b>%s</b> con éxito.', $alumno['nombre_completo']);
 
