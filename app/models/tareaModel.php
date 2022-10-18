@@ -28,7 +28,13 @@ class tareaModel extends Model {
   static function by_id($id)
   {
     // Un registro con $id
-    $sql = 'SELECT * FROM tareas WHERE id = :id LIMIT 1';
+    $sql = 
+    'SELECT 
+    t.*,
+    m.nombre AS materia
+    FROM tareas t
+    LEFT JOIN materias m ON m.id = t.id_materia  
+    WHERE t.id = :id LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 

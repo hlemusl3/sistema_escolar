@@ -30,7 +30,35 @@ class leccionesController extends Controller {
 
   function ver($id)
   {
-    View::render('ver');
+    if(!is_profesor(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::to('dashboard');
+    }
+
+      //Validar que exista la lección
+    if (!$leccion = leccionModel::by_id($id)) {
+      Flasher::new('No existe la lección en la Base de Datos.', 'danger');
+      Redirect::back();    
+    }
+
+    $id_profesor = get_user('id');
+    
+    //Validar el id del profesor y del registro
+    if ($leccion['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();    
+    }
+
+    $data =
+    [
+      'title' => sprintf('Lección: %s', $leccion['titulo']),
+      'hide_title' => true,
+      'slug' => 'grupos',
+      'id_profesor' => $id_profesor,
+      'l' => $leccion
+    ];
+
+    View::render('ver', $data);
   }
 
   function agregar()

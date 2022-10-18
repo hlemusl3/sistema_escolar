@@ -1,5 +1,5 @@
 <?php
-
+use \Verot\Upload\Upload;
 /**
  * Plantilla general de controladores
  * Versión 1.0.2
@@ -30,7 +30,35 @@ class tareasController extends Controller {
 
   function ver($id)
   {
-    View::render('ver');
+    if(!is_profesor(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::to('dashboard');
+    }
+
+      //Validar que exista la tarea
+    if (!$tarea = tareaModel::by_id($id)) {
+      Flasher::new('No existe la tarea en la Base de Datos.', 'danger');
+      Redirect::back();    
+    }
+
+    $id_profesor = get_user('id');
+    
+    //Validar el id del profesor y del registro
+    if ($tarea['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();    
+    }
+
+    $data =
+    [
+      'title' => sprintf('Tarea: %s', $tarea['titulo']),
+      'hide_title' => true,
+      'slug' => 'grupos',
+      'id_profesor' => $id_profesor,
+      't' => $tarea
+    ];
+
+    View::render('ver', $data);
   }
 
   function agregar()
@@ -57,7 +85,7 @@ class tareasController extends Controller {
   function post_agregar()
   {
     try {
-      if(!check_posted_data(['csrf','titulo','instrucciones','enlace','documento','id_materia','id_profesor','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
+      if(!check_posted_data(['csrf','titulo','instrucciones','enlace','id_materia','id_profesor','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
         throw new Exception(get_notificaciones());
       }
 
@@ -69,7 +97,7 @@ class tareasController extends Controller {
       $titulo = clean($_POST["titulo"]);
       $instrucciones = clean($_POST["instrucciones"]);
       $enlace = clean($_POST["enlace"]);
-      $documento = clean($_POST["documento"]);
+      $documento = $_FILES["documento"];
       $id_materia = clean($_POST["id_materia"]);
       $id_profesor = clean($_POST["id_profesor"]);
       $fecha_max = clean($_POST["fecha_max"]);
@@ -114,6 +142,29 @@ class tareasController extends Controller {
         'creado' => now()
       ];
       
+      //Validar si se está subiendo un documento
+      if ($documento['error'] !== 4) {
+        $tmp = $documento['tmp_name'];
+        $name = $documento['name'];
+        $ext = pathinfo($name, PATHINFO_EXTENSION);
+
+        $foo = new upload($documento);
+        if (!$foo->uploaded) {
+          throw new Exception('Hubo un problema al subir el archivo.');
+        }
+
+        $filename = generate_filename();
+        $foo->file_new_name_body = $filename;
+
+        $foo->process(UPLOADS);
+        if (!$foo->processed) {
+          throw new Exception('Hubo un problema al guardar el archivo en el servidor.');
+        }
+
+        $data['documento'] = sprintf('%s.%s', $filename, $ext);
+        $n_documento = true;
+      }
+
       //Insertar en la base de datos
       if(!$id = tareaModel::add(tareaModel::$t1, $data)){
         throw new Exception();
@@ -167,7 +218,7 @@ class tareasController extends Controller {
   function post_editar()
   {
     try {
-      if(!check_posted_data(['csrf','id','titulo','instrucciones','enlace','documento','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
+      if(!check_posted_data(['csrf','id','titulo','instrucciones','enlace','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
         throw new Exception(get_notificaciones());
       }
 
@@ -189,13 +240,15 @@ class tareasController extends Controller {
         throw new Exception(get_notificaciones());
       }
 
-
       $titulo = clean($_POST["titulo"]);
       $instrucciones = clean($_POST["instrucciones"]);
       $enlace = clean($_POST["enlace"]);
-      $documento = clean($_POST["documento"]);
+      $documento = $_FILES["documento"];
+      $n_documento = false;
       $fecha_max = clean($_POST["fecha_max"]);
       $status = clean($_POST["status"]);
+      
+      $db_documento = $tarea["documento"];    
 
       //Validar el titulo de la tarea
       if (strlen($titulo) < 5) {
@@ -213,14 +266,41 @@ class tareasController extends Controller {
         'titulo' => $titulo,
         'instrucciones' => $instrucciones,
         'enlace' => $enlace,
-        'documento' => $documento,
         'status' => $status,
         'fecha_disponible' => $fecha_max
       ];
       
+      //Validar si se está subiendo un documento
+      if ($documento['error'] !== 4) {
+        $tmp = $documento['tmp_name'];
+        $name = $documento['name'];
+        $ext = pathinfo($name, PATHINFO_EXTENSION);
+
+        $foo = new upload($documento);
+        if (!$foo->uploaded) {
+          throw new Exception('Hubo un problema al subir el archivo.');
+        }
+
+        $filename = generate_filename();
+        $foo->file_new_name_body = $filename;
+
+        $foo->process(UPLOADS);
+        if (!$foo->processed) {
+          throw new Exception('Hubo un problema al guardar el archivo en el servidor.');
+        }
+
+        $data['documento'] = sprintf('%s.%s', $filename, $ext);
+        $n_documento = true;
+      }
+
       //Actualizar registro
       if(!tareaModel::update(tareaModel::$t1, ['id' => $id], $data)){
         throw new Exception(get_notificaciones(3));
+      }
+
+      //Borrando el archivo anterior
+      if ($db_documento !== null && $n_documento === true && is_file(UPLOADS.$db_documento)){
+        unlink(UPLOADS.$db_documento);
       }
 
       Flasher::new(sprintf('Tarea titulada <b>%s</b> actualizada con éxito.', $titulo), 'success');

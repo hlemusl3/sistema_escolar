@@ -12,7 +12,7 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="editar_tarea">
                 <div class="card-body">
-                        <form action="tareas/post_editar" method="post">
+                        <form enctype="multipart/form-data" action="tareas/post_editar" method="post">
                             <?php echo insert_inputs();?>
                             <input type="hidden" name="id" value="<?php echo $d->t->id; ?>">
 

@@ -12,7 +12,7 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="agregar_tarea">
                 <div class="card-body">
-                        <form action="tareas/post_agregar" method="post">
+                        <form enctype="multipart/form-data" action="tareas/post_agregar" method="post">
                             <?php echo insert_inputs();?>
                             <input type="hidden" name="id_profesor" value="<?php echo $d->id_profesor; ?>">
 

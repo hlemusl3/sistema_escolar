@@ -38,7 +38,9 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-	<h1 class="h3 mb-0 text-gray-800"><?php echo isset($d->title) ? $d->title : null; ?></h1>
+  <?php if(!isset($d->hide_title)): ?>
+    <h1 class="h3 mb-0 text-gray-800"><?php echo isset($d->title) ? $d->title : null; ?></h1>
+  <?php endif; ?>
   <?php if(isset($d->button)): ?>
     <?php echo sprintf('<a href="%s" class="d-none d-sm-inline-block btn btn-sm %s shadow-sm">%s</a>',
     isset($d->button->url) ? $d->button->url : URL,
