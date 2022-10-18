@@ -228,3 +228,12 @@ function mail_confirmar_cuenta($id_usuario)
       ['publica', 'Publicada']
     ];
   }
+
+  function get_estados_tareas()
+  {
+    return
+    [
+      ['borrador', 'Borrador'],
+      ['publica', 'Publicada']
+    ];
+  }

@@ -106,7 +106,7 @@ class tareasController extends Controller {
         'id_materia' => $id_materia,
         'id_profesor' => $id_profesor,
         'titulo' => $titulo,
-        'instrucciones' => $instruciones,
+        'instrucciones' => $instrucciones,
         'enlace' => $enlace,
         'documento' => $documento,
         'status' => $status,
@@ -119,7 +119,7 @@ class tareasController extends Controller {
         throw new Exception();
       }
 
-      Flasher::new(sprintf('Nueva tarea titulada <b>%s</b> agregada con éxito para la materia <b>%s</b>.', add_ellipsis($titulo, 20), $materia['nombre']), 'success');
+      Flasher::new(sprintf('Nueva tarea titulada <b>%s</b> agregada con éxito para la materia <b>%s</b>.', $titulo, $materia['nombre']), 'success');
       Redirect::to(sprintf('grupos/materia/%s', $id_materia));
 
     } catch (PDOException $e) {
@@ -133,7 +133,35 @@ class tareasController extends Controller {
 
   function editar($id)
   {
-    View::render('editar');
+    if(!is_profesor(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::to('dashboard');
+    }
+
+     //Validar que exista la tarea
+    if (!$tarea = tareaModel::by_id($id)) {
+    Flasher::new('No existe la tarea en la Base de Datos.', 'danger');
+    Redirect::back();    
+    }
+
+    $id_profesor = get_user('id');
+
+    //Validar el id del profesor y del registro
+    if ($tarea['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();    
+    }
+
+    $data =
+    [
+      'title' => sprintf('Tarea: %s', $tarea['titulo']),
+      'slug' => 'grupos',
+      'button' => ['url' => sprintf('grupos/materia/%s', $tarea['id_materia']), 'text' => '<i class="fas fa-undo"></i> Lecciones y Tarea'],
+      'id_profesor' => $id_profesor,
+      't' => $tarea
+    ];
+
+    View::render('editar', $data);
   }
 
   function post_editar()

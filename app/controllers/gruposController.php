@@ -338,7 +338,8 @@ class gruposController extends Controller {
       'slug' => 'grupos',
       'button' => ['url' => 'grupos/asignados', 'text' => '<i class="fas fa-table"></i> Todos mis grupos'],
       'lecciones' => leccionModel::by_materia_profesor($id, get_user('id')),
-      'tareas' => tareaModel::by_materia_profesor($id, get_user('id'))
+      'tareas' => tareaModel::by_materia_profesor($id, get_user('id')),
+      'materia' => $materia
     ];
   
     View::render('materia', $data);

@@ -12,7 +12,7 @@
             <!-- Card Content - Collapse -->
             <div class="collapse show" id="agregar_tarea">
                 <div class="card-body">
-                        <form action="lecciones/post_agregar" method="post">
+                        <form action="tareas/post_agregar" method="post">
                             <?php echo insert_inputs();?>
                             <input type="hidden" name="id_profesor" value="<?php echo $d->id_profesor; ?>">
 
@@ -53,9 +53,9 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="status">Estado de la lección</label>
+                                <label for="status">Estado de la tarea</label>
                                 <select name="status" id="status" class="form-control">
-                                    <?php foreach(get_estados_lecciones() as $e): ?>
+                                    <?php foreach(get_estados_tareas() as $e): ?>
                                         <?php echo sprintf('<option value="%s">%s</option>', $e[0], $e[1]); ?>
                                     <?php endforeach; ?>
                                 </select>

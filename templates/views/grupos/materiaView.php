@@ -5,7 +5,11 @@
     <div class="col-xl-6 col-md-6 col-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title1; ?></h6>
+                <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title1; ?>
+                    <div class="btn-group float-right">
+                    <a class="btn btn-success btn-sm" href="<?php echo buildURL('lecciones/agregar', ['id_materia' => $d->materia->id], false, false); ?>"><i class="fas fa-plus"></i> <b>Agregar Lección</b></a>
+                    </div>
+                </h6>
             </div>
             <div class="card-body">
                 <?php if(!empty($d->lecciones->rows)): ?>
@@ -49,7 +53,11 @@
     <div class="col-xl-6 col-md-6 col-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title2; ?></h6>
+                <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title2; ?>
+                <div class="btn-group float-right">
+                    <a class="btn btn-success btn-sm" href="<?php echo buildURL('tareas/agregar', ['id_materia' => $d->materia->id], false, false); ?>"><i class="fas fa-plus"></i> <b>Agregar Tarea</b></a>
+                </div>
+                </h6>
             </div>
             <div class="card-body">
                 <?php if(!empty($d->tareas->rows)): ?>
