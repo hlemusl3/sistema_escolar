@@ -166,7 +166,73 @@ class tareasController extends Controller {
 
   function post_editar()
   {
+    try {
+      if(!check_posted_data(['csrf','id','titulo','instrucciones','enlace','documento','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
+        throw new Exception(get_notificaciones());
+      }
 
+      //Validar rol
+      if(!is_profesor(get_user_role())){
+        throw new Exception(get_notificaciones());
+      }
+
+      //validar que exista la tarea
+      $id = clean($_POST["id"]);
+      if(!$tarea = tareaModel::by_id($id)) {
+        throw new Exception('No existe la tarea en la base de datos.');
+      }
+
+      $id_profesor = get_user('id');
+
+      //Validar el id del profesor y del registro
+      if ($tarea['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+        throw new Exception(get_notificaciones());
+      }
+
+
+      $titulo = clean($_POST["titulo"]);
+      $instrucciones = clean($_POST["instrucciones"]);
+      $enlace = clean($_POST["enlace"]);
+      $documento = clean($_POST["documento"]);
+      $fecha_max = clean($_POST["fecha_max"]);
+      $status = clean($_POST["status"]);
+
+      //Validar el titulo de la tarea
+      if (strlen($titulo) < 5) {
+        throw new Exception('Ingresa un título mayor a 5 caracteres.');
+      }
+
+      //Validar el enlace
+      if (!filter_var($enlace, FILTER_VALIDATE_URL) && !empty($enlace)) {
+        throw new Exception('Ingresa un enlace (URL) válido.');
+      }
+
+      //Tarea a Guardar
+      $data =
+      [
+        'titulo' => $titulo,
+        'instrucciones' => $instrucciones,
+        'enlace' => $enlace,
+        'documento' => $documento,
+        'status' => $status,
+        'fecha_disponible' => $fecha_max
+      ];
+      
+      //Actualizar registro
+      if(!tareaModel::update(tareaModel::$t1, ['id' => $id], $data)){
+        throw new Exception(get_notificaciones(3));
+      }
+
+      Flasher::new(sprintf('Tarea titulada <b>%s</b> actualizada con éxito.', $titulo), 'success');
+      Redirect::to(sprintf('grupos/materia/%s', $tarea['id_materia']));
+
+    } catch (PDOException $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    }
   }
 
   function borrar($id)

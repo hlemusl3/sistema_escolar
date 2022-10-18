@@ -14,7 +14,7 @@
                 <div class="card-body">
                         <form action="tareas/post_editar" method="post">
                             <?php echo insert_inputs();?>
-                            <input type="hidden" name="id" value="<?php echo $d->id; ?>">
+                            <input type="hidden" name="id" value="<?php echo $d->t->id; ?>">
 
                             <div class="form-group">
                                 <div for="titulo">Título de la tarea *</div>
