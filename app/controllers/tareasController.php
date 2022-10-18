@@ -4,24 +4,24 @@
  * Plantilla general de controladores
  * Versión 1.0.2
  *
- * Controlador de lecciones
+ * Controlador de tareas
  */
-class leccionesController extends Controller {
+class tareasController extends Controller {
   function __construct()
   {
     if (!Auth::validate()) {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
+    
   }
   
   function index()
   {
-
     $data = 
     [
       'title' => 'Reemplazar título',
-      'msg'   => 'Bienvenido al controlador de "lecciones", se ha creado con éxito si ves este mensaje.'
+      'msg'   => 'Bienvenido al controlador de "tareas", se ha creado con éxito si ves este mensaje.'
     ];
     
     // Descomentar vista si requerida
@@ -43,7 +43,7 @@ class leccionesController extends Controller {
     $id_profesor = get_user('id');
     $data =
     [
-      'title' => 'Agregar nueva lección',
+      'title' => 'Agregar nueva tarea',
       'slug' => 'grupos',
       'button' => ['url' => 'grupos/asignados', 'text' => '<i class="fas fa-table"></i> Todos mis grupos'],
       'id_profesor' => $id_profesor,
@@ -57,8 +57,8 @@ class leccionesController extends Controller {
   function post_agregar()
   {
     try {
-      if(!check_posted_data(['csrf','titulo','video','contenido','id_materia','id_profesor','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
-        throw new Exception($_POST["video"]);
+      if(!check_posted_data(['csrf','titulo','instrucciones','enlace','documento','id_materia','id_profesor','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
+        throw new Exception(get_notificaciones());
       }
 
       //Validar rol
@@ -67,8 +67,9 @@ class leccionesController extends Controller {
       }
 
       $titulo = clean($_POST["titulo"]);
-      $video = clean($_POST["video"]);
-      $contenido = clean($_POST["contenido"], true);
+      $instrucciones = clean($_POST["instrucciones"]);
+      $enlace = clean($_POST["enlace"]);
+      $documento = clean($_POST["documento"]);
       $id_materia = clean($_POST["id_materia"]);
       $id_profesor = clean($_POST["id_profesor"]);
       $fecha_max = clean($_POST["fecha_max"]);
@@ -89,35 +90,36 @@ class leccionesController extends Controller {
         throw new Exception(sprintf('El profesor no tiene asignada la materia <b>%s</b>', $materia["nombre"]));
       }
 
-      //Validar el titulo de la leccion
+      //Validar el titulo de la tarea
       if (strlen($titulo) < 5) {
         throw new Exception('Ingresa un título mayor a 5 caracteres.');
       }
 
-      //Validar el url del video
-      if (!filter_var($video, FILTER_VALIDATE_URL) && !empty($video)) {
-        throw new Exception('Ingresa una URL de video válida.');
+      //Validar el enlace
+      if (!filter_var($enlace, FILTER_VALIDATE_URL) && !empty($enlace)) {
+        throw new Exception('Ingresa un enlace (URL) válido.');
       }
 
-      //Lección a guardar
+      //Tarea a Guardar
       $data =
       [
         'id_materia' => $id_materia,
         'id_profesor' => $id_profesor,
         'titulo' => $titulo,
-        'video' => $video,
-        'contenido' => $contenido,
+        'instrucciones' => $instruciones,
+        'enlace' => $enlace,
+        'documento' => $documento,
         'status' => $status,
         'fecha_disponible' => $fecha_max,
         'creado' => now()
       ];
-
+      
       //Insertar en la base de datos
-      if(!$id = leccionModel::add(leccionModel::$t1, $data)){
-        throw new Exception(get_notificaciones(2));
+      if(!$id = tareaModel::add(tareaModel::$t1, $data)){
+        throw new Exception();
       }
 
-      Flasher::new(sprintf('Nueva lección titulada <b>%s</b> agregada con éxito para la materia <b>%s</b>.', add_ellipsis($titulo, 20), $materia['nombre']), 'success');
+      Flasher::new(sprintf('Nueva tarea titulada <b>%s</b> agregada con éxito para la materia <b>%s</b>.', add_ellipsis($titulo, 20), $materia['nombre']), 'success');
       Redirect::to(sprintf('grupos/materia/%s', $id_materia));
 
     } catch (PDOException $e) {

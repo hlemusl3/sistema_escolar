@@ -317,4 +317,31 @@ class gruposController extends Controller {
 
     View::render('detalles', $data);
   }
+
+  function materia($id)
+  {
+    if (!is_profesor(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
+    if(!$materia = materiaModel::by_id($id)){
+      Flasher::new('No existe la materia en la base de datos.', 'danger');
+      Redirect::to('materias');
+    }
+
+    $data = 
+    [
+      'title' => sprintf('Lecciones y tareas de %s', $materia['nombre']),
+      'title1' => sprintf('Lecciones disponibles para %s', $materia['nombre']),
+      'title2' => sprintf('Tareas disponibles para %s', $materia['nombre']),
+      'slug' => 'grupos',
+      'button' => ['url' => 'grupos/asignados', 'text' => '<i class="fas fa-table"></i> Todos mis grupos'],
+      'lecciones' => leccionModel::by_materia_profesor($id, get_user('id')),
+      'tareas' => tareaModel::by_materia_profesor($id, get_user('id'))
+    ];
+  
+    View::render('materia', $data);
+  }
+
 }
