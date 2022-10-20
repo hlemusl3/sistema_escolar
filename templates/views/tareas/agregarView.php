@@ -62,6 +62,11 @@
                             </div>
 
                             <div class="form-group">
+                                <div for="fecha_inicial">Fecha inicial</div>
+                                <input type="date" class="form-control" id="fecha_inicial" name="fecha_inicial" required>
+                            </div>
+
+                            <div class="form-group">
                                 <div for="fecha_max">Fecha máxima</div>
                                 <input type="date" class="form-control" id="fecha_max" name="fecha_max" required>
                             </div>

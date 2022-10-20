@@ -38,6 +38,20 @@ class materiaModel extends Model {
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
   }
 
+  static function by_id_profesor($id, $id_materia)
+  {
+    // Un registro con $id
+    $sql = 
+    'SELECT
+    *
+    FROM
+        materias_profesores
+    WHERE
+        id_profesor = :id AND id_materia = :id_materia
+    LIMIT 1';
+    return ($rows = parent::query($sql, ['id' => $id, 'id_materia' => $id_materia])) ? $rows[0] : [];
+  }
+
   static function disponibles_profesor($id_profesor)
   {
     $sql = 

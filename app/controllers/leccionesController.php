@@ -73,7 +73,7 @@ class leccionesController extends Controller {
     [
       'title' => 'Agregar nueva lección',
       'slug' => 'grupos',
-      'button' => ['url' => 'grupos/asignados', 'text' => '<i class="fas fa-table"></i> Todos mis grupos'],
+      'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
       'id_profesor' => $id_profesor,
       'id_materia' => isset($_GET["id_materia"]) ? $_GET["id_materia"] : null,
       'materias_profesor' => materiaModel::materias_profesor($id_profesor)
@@ -85,7 +85,7 @@ class leccionesController extends Controller {
   function post_agregar()
   {
     try {
-      if(!check_posted_data(['csrf','titulo','video','contenido','id_materia','id_profesor','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
+      if(!check_posted_data(['csrf','titulo','video','contenido','id_materia','id_profesor','fecha_inicial','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
         throw new Exception($_POST["video"]);
       }
 
@@ -99,6 +99,7 @@ class leccionesController extends Controller {
       $contenido = clean($_POST["contenido"], true);
       $id_materia = clean($_POST["id_materia"]);
       $id_profesor = clean($_POST["id_profesor"]);
+      $fecha_inicial = clean($_POST["fecha_inicial"]);
       $fecha_max = clean($_POST["fecha_max"]);
       $status = clean($_POST["status"]);
 
@@ -136,6 +137,7 @@ class leccionesController extends Controller {
         'video' => $video,
         'contenido' => $contenido,
         'status' => $status,
+        'fecha_inicial' => $fecha_inicial,
         'fecha_disponible' => $fecha_max,
         'creado' => now()
       ];
@@ -190,7 +192,7 @@ class leccionesController extends Controller {
   function post_editar()
   {
     try {
-      if (!check_posted_data(['csrf','id','titulo','video','contenido','fecha_max','status'],$_POST) || !Csrf::validate($_POST['csrf'])) {
+      if (!check_posted_data(['csrf','id','titulo','video','contenido','fecha_inicial','fecha_max','status'],$_POST) || !Csrf::validate($_POST['csrf'])) {
         throw new Exception(get_notificaciones());
       }
 
@@ -216,6 +218,7 @@ class leccionesController extends Controller {
       $titulo = clean($_POST["titulo"]);
       $video = clean($_POST["video"]);
       $contenido = clean($_POST["contenido"], true);
+      $fecha_inicial = clean($_POST["fecha_inicial"]);
       $fecha_max = clean($_POST["fecha_max"]);
       $status = clean($_POST["status"]);
 
@@ -236,7 +239,8 @@ class leccionesController extends Controller {
         'video' => $video,
         'contenido' => $contenido,
         'status' => $status,
-        'fecha_disponible' => $fecha_max,
+        'fecha_inicial' => $fecha_inicial,
+        'fecha_disponible' => $fecha_max
       ];
 
       //Actualizar registro

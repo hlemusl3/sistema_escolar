@@ -330,13 +330,18 @@ class gruposController extends Controller {
       Redirect::to('materias');
     }
 
+    if(empty(materiaModel::by_id_profesor(get_user('id'), $id))){
+      Flasher::new('La materia no está asignada al profesor.', 'danger');
+      Redirect::to('materias');
+    }
+
     $data = 
     [
       'title' => sprintf('Lecciones y tareas de %s', $materia['nombre']),
       'title1' => sprintf('Lecciones disponibles para %s', $materia['nombre']),
       'title2' => sprintf('Tareas disponibles para %s', $materia['nombre']),
       'slug' => 'grupos',
-      'button' => ['url' => 'grupos/asignados', 'text' => '<i class="fas fa-table"></i> Todos mis grupos'],
+      'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
       'lecciones' => leccionModel::by_materia_profesor($id, get_user('id')),
       'tareas' => tareaModel::by_materia_profesor($id, get_user('id')),
       'materia' => $materia

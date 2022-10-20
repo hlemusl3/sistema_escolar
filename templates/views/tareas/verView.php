@@ -15,7 +15,7 @@
                 <div class="card-footer">
                     <?php echo format_estado_tarea($d->t->status); ?>
 
-                    <span class="float-right"><?php echo sprintf('Disponible hasta el <b>%s</b>.', format_date($d->t->fecha_disponible)); ?></span>
+                    <span class="float-right"><?php echo sprintf('Disponible desde el <b>%s</b> hasta el <b>%s</b>.',format_date($d->t->fecha_inicial), format_date($d->t->fecha_disponible)); ?></span>
                 </div>
             </div>
             

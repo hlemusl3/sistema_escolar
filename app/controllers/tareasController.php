@@ -79,7 +79,7 @@ class tareasController extends Controller {
     [
       'title' => 'Agregar nueva tarea',
       'slug' => 'grupos',
-      'button' => ['url' => 'grupos/asignados', 'text' => '<i class="fas fa-table"></i> Todos mis grupos'],
+      'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
       'id_profesor' => $id_profesor,
       'id_materia' => isset($_GET["id_materia"]) ? $_GET["id_materia"] : null,
       'materias_profesor' => materiaModel::materias_profesor($id_profesor)
@@ -91,7 +91,7 @@ class tareasController extends Controller {
   function post_agregar()
   {
     try {
-      if(!check_posted_data(['csrf','titulo','instrucciones','enlace','id_materia','id_profesor','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
+      if(!check_posted_data(['csrf','titulo','instrucciones','enlace','id_materia','id_profesor','fecha_inicial','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
         throw new Exception(get_notificaciones());
       }
 
@@ -106,6 +106,7 @@ class tareasController extends Controller {
       $documento = $_FILES["documento"];
       $id_materia = clean($_POST["id_materia"]);
       $id_profesor = clean($_POST["id_profesor"]);
+      $fecha_inicial = clean($_POST["fecha_inicial"]);
       $fecha_max = clean($_POST["fecha_max"]);
       $status = clean($_POST["status"]);
 
@@ -143,6 +144,7 @@ class tareasController extends Controller {
         'instrucciones' => $instrucciones,
         'enlace' => $enlace,
         'status' => $status,
+        'fecha_inicial' => $fecha_inicial,
         'fecha_disponible' => $fecha_max,
         'creado' => now()
       ];
@@ -223,7 +225,7 @@ class tareasController extends Controller {
   function post_editar()
   {
     try {
-      if(!check_posted_data(['csrf','id','titulo','instrucciones','enlace','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
+      if(!check_posted_data(['csrf','id','titulo','instrucciones','enlace','fecha_inicial','fecha_max','status'], $_POST) || !Csrf::validate($_POST['csrf'])){
         throw new Exception(get_notificaciones());
       }
 
@@ -250,6 +252,7 @@ class tareasController extends Controller {
       $enlace = clean($_POST["enlace"]);
       $documento = $_FILES["documento"];
       $n_documento = false;
+      $fecha_inicial = clean($_POST["fecha_inicial"]);
       $fecha_max = clean($_POST["fecha_max"]);
       $status = clean($_POST["status"]);
       
@@ -272,6 +275,7 @@ class tareasController extends Controller {
         'instrucciones' => $instrucciones,
         'enlace' => $enlace,
         'status' => $status,
+        'fecha_inicial' => $fecha_inicial,
         'fecha_disponible' => $fecha_max
       ];
       
