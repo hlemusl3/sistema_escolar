@@ -26,7 +26,8 @@ class dashboardController extends Controller {
     ];
 
     if(is_admin($rol)){
-      #code...
+      $data=['hide_title'];
+      View::render('dashboard', $data);
     } else if (is_profesor($rol)) {
       $data ['stats'] = profesorModel::stats_by_id(get_user('id'));
       View::render('dashboard_profesor', $data);

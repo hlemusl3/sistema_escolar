@@ -106,7 +106,7 @@ class entregasController extends Controller {
     $id_grupo = $grupo['id_grupo'];    
     $data = 
     [
-      'title' => sprintf('Entregas del alumno <b>%s</b> para la tarea <b>%s</b>', $alumno['nombre_completo'], $tarea['titulo']),
+      'title' => sprintf('Entrega del alumno <b>%s</b> para la tarea <b>%s</b>', $alumno['nombre_completo'], $tarea['titulo']),
       'slug'   => 'grupos',
       'button' => ['url' => sprintf('entregas/ver/%s/%s', $id_tarea, $id_grupo), 'text' => '<i class="fas fa-undo"></i> Regresar'],
       'entrega' => $entrega,
