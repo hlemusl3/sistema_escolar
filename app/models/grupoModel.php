@@ -203,5 +203,44 @@ class grupoModel extends Model {
     WHERE g.id = :id';
     return (parent::query($sql, ['id' => $id_grupo])) ? true : false;
   }
-}
 
+  static function grupos_materia_profesor($id_profesor, $id_materia)
+  {
+    $sql =
+    'SELECT
+        g.id AS id_grupo,
+        g.nombre AS nombre_grupo
+    FROM
+        grupos_materias AS gm
+    JOIN materias_profesores AS mp
+    ON
+        gm.id_mp = mp.id
+    JOIN grupos AS g
+    ON
+        gm.id_grupo = g.id
+    JOIN materias AS m
+    ON
+        mp.id_materia = m.id
+    JOIN usuarios AS u
+    ON
+        mp.id_profesor = u.id
+    WHERE
+        mp.id_profesor = :id_profesor AND mp.id_materia = :id_materia
+    ORDER BY nombre_grupo ASC';
+    return ($rows = parent::query($sql, ['id_profesor' => $id_profesor, 'id_materia' => $id_materia])) ? $rows : [];
+  }
+
+  static function grupo_alumno($id_alumno)
+  {
+    $sql =
+    'SELECT
+        g.id AS id_grupo
+    FROM
+        grupos AS g
+    JOIN grupos_alumnos ga ON
+        ga.id_grupo = g.id
+    WHERE
+        ga.id_alumno = :id_alumno';
+    return ($rows = parent::query($sql, ['id_alumno' => $id_alumno])) ? $rows[0] : [];
+  }
+}

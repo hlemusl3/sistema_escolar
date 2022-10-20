@@ -73,6 +73,5 @@ class alumnoModel extends Model {
     $sql = 'DELETE u FROM usuarios u WHERE u.id = :id AND u.rol = "alumno"';
     return (parent::query($sql, ['id' => $id])) ? true: false;
   }
-
 }
 

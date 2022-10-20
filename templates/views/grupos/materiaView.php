@@ -47,6 +47,11 @@
                                     <div class="col-xl-4">
                                         <span class="text-dark">
                                             <?php echo add_ellipsis($l->titulo, 100); ?>
+                                            <?php if(!empty($l->video)): ?>
+                                                <span>
+                                                    <div class="badge badge-pull badge-warning"><i class="fas fa-video"></i> Tiene video</div>
+                                                </span>
+                                            <?php endif; ?>
                                         </span>
                                     </div>
 

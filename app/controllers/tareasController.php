@@ -35,7 +35,7 @@ class tareasController extends Controller {
       Redirect::to('dashboard');
     }
 
-      //Validar que exista la tarea
+    //Validar que exista la tarea
     if (!$tarea = tareaModel::by_id($id)) {
       Flasher::new('No existe la tarea en la Base de Datos.', 'danger');
       Redirect::back();    
@@ -49,13 +49,19 @@ class tareasController extends Controller {
       Redirect::back();    
     }
 
+    $id_materia = $tarea['id_materia'];
+ 
+    $grupos = grupoModel::grupos_materia_profesor($id_profesor, $id_materia);
+
     $data =
     [
       'title' => sprintf('Tarea: %s', $tarea['titulo']),
       'hide_title' => true,
       'slug' => 'grupos',
       'id_profesor' => $id_profesor,
-      't' => $tarea
+      'id_tarea' => $tarea['id'],
+      't' => $tarea,
+      'g' => $grupos
     ];
 
     View::render('ver', $data);
@@ -317,6 +323,57 @@ class tareasController extends Controller {
 
   function borrar($id)
   {
-    // Proceso de borrado
+    try {
+      if(!check_get_data(['_t'], $_GET) || !Csrf::validate($_GET['_t'])){
+        throw new Exception(get_notificaciones(0));
+      }
+
+      if(!is_profesor(get_user_role())) {
+        throw new Exception(get_notificaciones());
+      }
+  
+      //Validar que exista la lección
+      if (!$tarea = tareaModel::by_id($id)) {
+        throw new Exception(get_notificaciones());
+      }
+
+      $id_profesor = get_user('id');
+
+      //Validar el id del profesor y del registro
+      if ($tarea['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+        throw new Exception(get_notificaciones());
+      }
+
+      //Validar si hay entregas de alumnos en la tarea
+      if(!empty($entregas = entregaModel::by_id_tarea($id))){
+        foreach ($entregas as $rows) {
+          if(!empty($rows['documento']) && is_file(UPLOADS.$rows['documento'])){
+            unlink(UPLOADS.$rows['documento']);
+          }
+        }
+        entregaModel::remove(entregaModel::$t1, ['id_tarea' => $id]);
+      }
+
+      //Quitar el registro de la base de datos
+      if(!tareaModel::remove(tareaModel::$t1, ['id' => $id], 1)){
+        throw new Exception(get_notificaciones(4));
+      }
+
+      $documento = $tarea['documento'];
+
+      if(!empty($documento) && is_file(UPLOADS.$documento)){
+        unlink(UPLOADS.$documento);
+      }
+
+      Flasher::new(sprintf('Tarea titulada <b>%s</b> borrada con éxito.', $tarea['titulo']), 'success');
+      Redirect::back();
+
+    } catch (PDOException $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    }
   }
 }

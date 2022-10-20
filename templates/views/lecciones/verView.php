@@ -23,7 +23,7 @@
                 <!-- Video de la lección -->
                 <div class="card shadow mb-4">
                     <div class="card-header font-weight-bold text-primary">Video disponible</div>
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <div class="yt_video_wrapper">
                             <iframe src="<?php echo $d->l->video; ?>" title="<?php echo $d->l->titulo; ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>

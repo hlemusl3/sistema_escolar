@@ -34,6 +34,20 @@
                             <div class="form-group">
                                 <div for="documento">Documento</div>
                                 <input type="file" class="form-control" id="documento" name="documento" accept="image/*, video/*, audio/*, .pdf, .docx, .xlsx, .doc, .xls">
+                                    <?php if (!empty($d->t->documento)): ?>
+                                        <?php if(is_file(UPLOADS.$d->t->documento)): ?>
+                                            <a href="<?php echo sprintf('assets/uploads/%s', $d->t->documento)?>">
+                                                <div class="badge badge-info btn-primary"><i class="fa fa-download"></i> Click Aqui para descargar</div>
+                                            </a>
+                                        <?php else: ?>
+                                            <a href="<?php echo get_image('broken.png'); ?>" data-lightbox="Documento" title="<?php echo sprintf('No se encontro el documento.')?>">
+                                                <img src="<?php echo get_image('broken.png'); ?>" alt="<?php echo sprintf('Documento')?>" class="img-fluid img-thumbnail">
+                                            </a>
+                                            <p class="text-muted"><?php echo sprintf('El archivo %s no existe o está dañado.', $d->t->documento)?></p>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                                No hay un documento disponible.        
+                                    <?php endif; ?>
                             </div>
 
                             <div class="form-group">

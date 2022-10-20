@@ -58,18 +58,33 @@
                 </div>
             </div>
 
-
-            <!-- Contenido de la Tarea -->
+            <!-- Entregas de la Tarea -->
             <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
-                <a href="#contenido_leccion" class="d-block card-header py-3" data-toggle="collapse"
-                    role="button" aria-expanded="true" aria-controls="contenido_leccion">
-                    <h6 class="m-0 font-weight-bold text-primary"> Contenido</h6>
+                <a href="#entregas" class="d-block card-header py-3" data-toggle="collapse"
+                    role="button" aria-expanded="true" aria-controls="entregas">
+                    <h6 class="m-0 font-weight-bold text-primary">Entregas de grupos</h6>
                 </a>
                 <!-- Carda Content - Collapse -->
-                <div class="collapse show" id="contenido_leccion">
+                <div class="collapse show" id="entregas">
                     <div class="card-body">
-                        <?php echo nl2br($d->t->contenido); ?>
+                        <?php if (!empty($d->g)): ?>
+                            <ul class="list-group">
+                                <?php foreach ($d->g as $g): ?>
+                                    <li class="list-group-item">
+                                        <div class="btn-group float-right">
+                                        </div>
+                                        <a href="<?php echo sprintf('entregas/ver/%s/%s', $d->id_tarea, $g->id_grupo); ?>"><b><?php echo sprintf('Entregas de: %s',$g->nombre_grupo); ?></b></a>
+                                        <br>
+                                </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <div class="text-center py-5">
+                                <img src="<?php echo get_image('undraw_taken.png'); ?>" alt="No hay registros." class="img-fluid" style="width: 200px;">
+                                <p class="text-muted">No hay alumnos asignados al grupo.</p>
+                            </div>
+                        <?php endif; ?>                        
                     </div>
                 </div>
             </div>
