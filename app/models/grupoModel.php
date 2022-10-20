@@ -243,4 +243,31 @@ class grupoModel extends Model {
         ga.id_alumno = :id_alumno';
     return ($rows = parent::query($sql, ['id_alumno' => $id_alumno])) ? $rows[0] : [];
   }
+
+  static function by_alumno($id_alumno)
+  {
+    $sql = 
+    'SELECT
+    g.*
+    FROM
+    grupos g
+    JOIN grupos_alumnos ga ON ga.id_grupo = g.id
+    JOIN usuarios u ON u.id = ga.id_alumno
+    WHERE
+    u.id = :id AND u.rol = "alumno"';
+
+    $grupo = [];
+    $rows = parent::query($sql, ['id' => $id_alumno]);
+
+    if(!$rows) return $grupo;
+
+    //Cargar materias
+    $grupo = $rows[0];
+    $grupo['materias'] = grupoModel::materias_asignadas($grupo['id']);
+
+    //Cargando compañeros
+    $grupo['alumnos'] = grupoModel::alumnos_asignados($grupo['id']);
+
+    return $grupo;
+  }
 }
