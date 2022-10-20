@@ -133,7 +133,7 @@ class tareasController extends Controller {
       if (!filter_var($enlace, FILTER_VALIDATE_URL) && !empty($enlace)) {
         throw new Exception('Ingresa un enlace (URL) válido.');
       }
-
+   
       //Tarea a Guardar
       $data =
       [
@@ -142,7 +142,6 @@ class tareasController extends Controller {
         'titulo' => $titulo,
         'instrucciones' => $instrucciones,
         'enlace' => $enlace,
-        'documento' => $documento,
         'status' => $status,
         'fecha_disponible' => $fecha_max,
         'creado' => now()
@@ -346,9 +345,10 @@ class tareasController extends Controller {
 
       //Validar si hay entregas de alumnos en la tarea
       if(!empty($entregas = entregaModel::by_id_tarea($id))){
-        foreach ($entregas as $rows) {
-          if(!empty($rows['documento']) && is_file(UPLOADS.$rows['documento'])){
-            unlink(UPLOADS.$rows['documento']);
+
+        foreach ($entregas as $r) {
+          if(!empty($r['documento']) && is_file(UPLOADS.$r['documento'])){
+            unlink(UPLOADS.$r['documento']);
           }
         }
         entregaModel::remove(entregaModel::$t1, ['id_tarea' => $id]);
