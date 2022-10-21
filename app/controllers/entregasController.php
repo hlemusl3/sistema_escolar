@@ -92,10 +92,6 @@ class entregasController extends Controller {
 
   function detalle($id)
   {
-    if(!is_profesor(get_user_role())){
-      Flasher::new(get_notificaciones(), 'danger');
-      Redirect::back();      
-    }
 
     $entrega = entregaModel::by_id($id);
     $id_tarea = $entrega['id_tarea'];

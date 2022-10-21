@@ -1,4 +1,5 @@
 <?php
+use \Verot\Upload\Upload;
 
 /**
  * Plantilla general de controladores
@@ -183,14 +184,122 @@ class alumnoController extends Controller {
       Redirect::to('alumno/tareas');
     }
 
+    $entrega = entregaModel::by_id_tarea($id_tarea);
+    
     $data = 
     [
       'title' => sprintf('Tarea %s', $tarea['titulo']),
       'hide_title' => true,
       'slug' => 'alumno-tareas',
-      't' => $tarea
+      't' => $tarea,
+      'id_tarea' => $id_tarea,
+      'id_entrega' => $entrega['id'] = (!empty($entrega)) ? $entrega['id'] : null 
     ];
 
-    View::render('tareas', $data);
+    View::render('tarea', $data);
+  }
+
+  function entrega($id)
+  {
+    $entrega = entregaModel::by_id($id);
+    $id_tarea = $entrega['id_tarea'];
+    $id_alumno = $entrega['id_alumno'];
+    $alumno = usuarioModel::by_id($id_alumno);
+    $tarea = tareaModel::by_id($id_tarea);
+    $grupo = grupoModel::grupo_alumno($id_alumno);
+    $id_grupo = $grupo['id_grupo'];    
+    $data = 
+    [
+      'title' => sprintf('Entrega del alumno <b>%s</b> para la tarea <b>%s</b>', $alumno['nombre_completo'], $tarea['titulo']),
+      'slug'   => 'tareas',
+      'button' => ['url' => sprintf('alumno/tarea/%s', $id_tarea), 'text' => '<i class="fas fa-undo"></i> Regresar'],
+      'entrega' => $entrega,
+      'alumno' => $alumno
+    ];
+    View::render('entrega', $data);
+  }
+
+  function entregar($id_tarea)
+  {
+    $tarea = tareaModel::by_id($id_tarea);
+    $alumno = get_user('nombre_completo');
+    $data = 
+    [
+      'title' => sprintf('Agregar entrega a la tarea %s', $tarea['titulo']),
+      'slug' => 'tareas',
+      'button' => ['url' => sprintf('alumno/tarea/%s', $id_tarea), 'text' => '<i clas="fas fa-undo"></i> Regresar'],
+      'id_tarea' => $tarea['id'],
+      'id_alumno' => $this->id_alumno,
+      'alumno' => $alumno
+    ];
+    View::render('entregar', $data);
+  }
+
+  function post_entregar()
+  {
+    try {
+      if(!check_posted_data(['csrf','id_tarea','id_alumno','comentario','enlace'], $_POST) || !Csrf::validate($_POST['csrf'])){
+        throw new Exception(get_notificaciones());
+      }
+
+      $id_tarea = clean($_POST["id_tarea"]);
+      $id_alumno = clean($_POST["id_alumno"]);
+      $comentario = clean($_POST["comentario"]);
+      $enlace = clean($_POST["enlace"]);
+      $documento = $_FILES["documento"];
+
+      //Validar el enlace
+      if (!filter_var($enlace, FILTER_VALIDATE_URL) && !empty($enlace)) {
+        throw new Exception('Ingresa un enlace (URL) válido.');
+      }
+
+      //Entrega a guardar
+      $data =
+      [
+        'id_tarea' => $id_tarea,
+        'id_alumno' => $id_alumno,
+        'comentario' => $comentario,
+        'enlace' => $enlace,
+        'fecha_entregado' => now()
+      ];
+
+      //Validar si se está subiendo un documento
+      if ($documento['error'] !== 4) {
+        $tmp = $documento['tmp_name'];
+        $name = $documento['name'];
+        $ext = pathinfo($name, PATHINFO_EXTENSION);
+
+        $foo = new upload($documento);
+        if (!$foo->uploaded) {
+          throw new Exception('Hubo un problema al subir el archivo.');
+        }
+
+        $filename = generate_filename();
+        $foo->file_new_name_body = $filename;
+
+        $foo->process(UPLOADS);
+        if (!$foo->processed) {
+          throw new Exception('Hubo un problema al guardar el archivo en el servidor.');
+        }
+
+        $data['documento'] = sprintf('%s.%s', $filename, $ext);
+        $n_documento = true;
+      }
+
+      //Insertar en la base de datos
+      if(!$id = entregaModel::add(entregaModel::$t1, $data)){
+        throw new Exception();
+      }
+
+      Flasher::new('Tarea entregada con éxito');
+      Redirect::to(sprintf('alumno/tarea/%s', $id_tarea));
+
+    } catch (PDOException $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    } catch (Exception $e) {
+      Flasher::new($e->getMessage(), 'danger');
+      Redirect::back();
+    }
   }
 }

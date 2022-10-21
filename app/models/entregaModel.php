@@ -70,7 +70,7 @@ class entregaModel extends Model {
         e.id_tarea = t.id
     WHERE
         t.id = :id_tarea';
-    return ($rows = parent::query($sql, ['id_tarea' => $id_tarea])) ? $rows : [];
+    return ($rows = parent::query($sql, ['id_tarea' => $id_tarea])) ? $rows[0] : [];
   }
 
 

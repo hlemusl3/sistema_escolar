@@ -30,9 +30,11 @@ class leccionModel extends Model {
     // Un registro con $id
     $sql = 
     'SELECT 
-    l.* ,
-    m.nombre AS materia
+    l.*,
+    m.nombre AS materia,
+    p.nombre_completo AS profesor
     FROM lecciones l
+    LEFT JOIN usuarios p ON p.id = l.id_profesor AND p.rol = "profesor"
     LEFT JOIN materias m ON m.id = l.id_materia
     WHERE l.id = :id LIMIT 1';
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows[0] : [];
