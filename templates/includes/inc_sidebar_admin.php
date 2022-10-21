@@ -1,10 +1,9 @@
-            <?php if (is_admin(get_user_role())): ?>
                 <li class="nav-item <?php echo $slug === 'admin' ? 'active' : null; ?>">
-                <a class="nav-link" href="dashboard">
+                <a class="nav-link" href="admin">
                     <i class="fas fa-fw fa-user-lock"></i>
                     <span>Administración</span></a>
             </li>
-            <?php endif;?>
+
             <!-- Nav Item - Dashboard -->
             <li class="nav-item <?php echo $slug === 'dashboard' ? 'active' : null; ?>">
                 <a class="nav-link" href="dashboard">
@@ -48,18 +47,18 @@
                     <span>Grupos</span></a>
             </li>
 
-            <!-- Horarios -->
-            <li class="nav-item <?php echo $slug === 'horarios' ? 'active' : null; ?>">
-                <a class="nav-link" href="horarios">
-                    <i class="fas fa-fw fa-calendar-alt"></i>
-                    <span>Horarios</span></a>
-            </li>
-
             <!-- Lecciones -->
             <li class="nav-item <?php echo $slug === 'lecciones' ? 'active' : null; ?>">
                 <a class="nav-link" href="lecciones">
                     <i class="fas fa-fw fa-chalkboard-teacher"></i>
                     <span>Lecciones</span></a>
+            </li>
+
+            <!-- Tareas -->
+            <li class="nav-item <?php echo $slug === 'tareas' ? 'active' : null; ?>">
+                <a class="nav-link" href="tareas">
+                    <i class="fas fa-fw fa-layer-group"></i>
+                    <span>Tareas</span></a>
             </li>
 
             <!-- Divider -->
@@ -69,10 +68,3 @@
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-            
-            <!-- Sidebar Message 
-            <div class="sidebar-card d-none d-lg-flex">
-                <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-                <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-                <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-            </div>-->

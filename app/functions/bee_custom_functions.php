@@ -351,3 +351,54 @@ function format_tiempo_restante($fecha)
 
   return $output;
 }
+
+function get_ingresos()
+{
+  return
+  [
+    ['Enero', rand(10000,90000)],
+    ['Febrero', rand(10000,90000)],
+    ['Marzo', rand(10000,90000)],
+    ['Abril', rand(10000,90000)],
+    ['Mayo', rand(10000,90000)],
+    ['Junio', rand(10000,90000)],
+    ['Julio', rand(10000,90000)],
+    ['Agosto', rand(10000,90000)],
+    ['Septiembre', rand(10000,90000)],
+    ['Octubre', rand(10000,90000)],
+    ['Noviembre', rand(10000,90000)],
+    ['Diciembre', rand(10000,90000)]
+  ];
+}
+
+function get_proyectos()
+{
+  return
+  [
+    [
+      'titulo' => 'Programa escolar 2022',
+      'tipo' => 'danger',
+      'progreso' => rand(0,20)
+    ],
+    [
+      'titulo' => 'Registro de nuevos alumnos',
+      'tipo' => 'warning',
+      'progreso' => rand(20,40)
+    ],
+    [
+      'titulo' => 'Registro de profesores',
+      'tipo' => 'primary',
+      'progreso' => rand(40,60)
+    ],
+    [
+      'titulo' => 'Capacitaciones',
+      'tipo' => 'info',
+      'progreso' => rand(60,80)
+    ],
+    [
+      'titulo' => 'Crear un sistema un escolar',
+      'tipo' => 'success',
+      'progreso' => 100
+    ]
+  ];
+}

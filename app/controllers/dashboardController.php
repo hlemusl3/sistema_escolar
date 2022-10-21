@@ -26,8 +26,9 @@ class dashboardController extends Controller {
     ];
 
     if(is_admin($rol)){
-      $data=['hide_title'];
-      View::render('dashboard', $data);
+      
+      $data ['stats'] = adminModel::stats();
+      View::render('dashboard_admin', $data);
 
     } else if (is_profesor($rol)) {
 
