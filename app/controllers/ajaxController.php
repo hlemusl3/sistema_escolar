@@ -663,4 +663,102 @@ function add_materia_profesor()
     }
   }
 
+  function get_resumen_ingresos()
+  {
+    try {
+      if(!is_admin(get_user_role())){
+        throw new Exception(get_notificaciones(1));
+      }
+
+      //Operaciones necesarias
+      $stats = adminModel::stats();
+      $ingresos = $stats['ingresos'];
+      $labels = [];
+      $dataset = [];
+
+      foreach ($ingresos as $v) {
+        $labels[] = $v[0];
+        $dataset[]= $v[1];
+      }
+
+      $data =
+      [
+        'labels' => $labels,
+        'data'=> $dataset
+      ];
+
+      json_output(json_build(200, $data));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    } catch (PDOException $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function get_resumen_comunidad()
+  {
+    try {
+      if(!is_admin(get_user_role())){
+        throw new Exception(get_notificaciones(1));
+      }
+
+      //Operaciones necesarias
+      $stats = adminModel::stats();
+      $comunidad = $stats['comunidad'];
+      $labels = [];
+      $dataset = [];
+
+      foreach ($comunidad as $v) {
+        $labels[] = $v['rol'];
+        $dataset[]= $v['total'];
+      }
+
+      $data =
+      [
+        'labels' => $labels,
+        'data'=> $dataset
+      ];
+
+      json_output(json_build(200, $data));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    } catch (PDOException $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function get_resumen_ensenanza()
+  {
+    try {
+      if(!is_admin(get_user_role())){
+        throw new Exception(get_notificaciones(1));
+      }
+
+      //Operaciones necesarias
+      $stats = adminModel::stats();
+      $ensenanza = $stats['ensenanza'];
+      $labels = [];
+      $dataset = [];
+
+      foreach ($ensenanza as $v) {
+        $labels[] = $v['mes'];
+        $dataset[]= $v['total'];
+      }
+
+      $data =
+      [
+        'labels' => $labels,
+        'data'=> $dataset
+      ];
+
+      json_output(json_build(200, $data));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    } catch (PDOException $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
 }

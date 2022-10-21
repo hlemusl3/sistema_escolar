@@ -47,7 +47,7 @@
 											<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $d->stats->alumnos?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-users fa-2x text-gray-300"></i>
+											<i class="fas fa-book-reader fa-2x text-gray-300"></i>
 										</div>
 									</div>
 								</div>
@@ -225,8 +225,8 @@
 									<h6 class="m-0 font-weight-bold text-primary">Anuncio Educativo</h6>
 								</div>
 								<div class="card-body">
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores cupiditate nisi eius tempora quas ut, omnis, quisquam ducimus eos explicabo, reiciendis minus temporibus harum. Quos placeat, autem architecto sed sit optio voluptates reiciendis doloribus modi accusantium distinctio dolores debitis porro, ipsam praesentium dicta eveniet commodi itaque. Illo facere rem quo!</p>
-									<p class="mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio, debitis!</p>
+									<p>Innovando la educación en Izabal.</p>
+									<p class="mb-0"></p>
 								</div>
 							</div>
 						</div>
