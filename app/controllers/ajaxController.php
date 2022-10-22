@@ -107,8 +107,7 @@ class ajaxController extends Controller {
 
   function index()
   {
-    /**
-    200 OK
+    /**200 OK
     201 Created
     300 Multiple Choices
     301 Moved Permanently
@@ -754,6 +753,62 @@ function add_materia_profesor()
       ];
 
       json_output(json_build(200, $data));
+
+    } catch (Exception $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    } catch (PDOException $e) {
+      json_output(json_build(400, null, $e->getMessage()));
+    }
+  }
+
+  function reiniciar_sistema()
+  {
+    try {
+      if(!is_admin(get_user_role())){
+        throw new Exception(get_notificaciones(1));
+      }
+
+      //id del usuario actual
+      $id = get_user('id');
+      $nombre = get_user('nombre_completo');
+
+      // Reiniciar tabla de materias
+      $sql = 'TRUNCATE TABLE materias';
+      Model::query($sql, [], ['transaction' => false]);
+
+      // Reiniciar tabla de materias_profesores
+      $sql = 'TRUNCATE TABLE materias_profesores';
+      Model::query($sql, [], ['transaction' => false]);
+
+      // Reiniciar tabla de grupos
+      $sql = 'TRUNCATE TABLE grupos';
+      Model::query($sql, [], ['transaction' => false]);
+      
+      // Reiniciar tabla de grupos_alumnos
+      $sql = 'TRUNCATE TABLE grupos_alumnos';
+      Model::query($sql, [], ['transaction' => false]);
+
+      // Reiniciar tabla de grupos_materias
+      $sql = 'TRUNCATE TABLE grupos_materias';
+      Model::query($sql, [], ['transaction' => false]);
+
+      // Reiniciar tabla de lecciones
+      $sql = 'TRUNCATE TABLE lecciones';
+      Model::query($sql, [], ['transaction' => false]);
+
+      // Reiniciar tabla de tareas
+      $sql = 'TRUNCATE TABLE tareas';
+      Model::query($sql, [], ['transaction' => false]);
+
+      // Reiniciar tabla de entregas
+      $sql = 'TRUNCATE TABLE entregas';
+      Model::query($sql, [], ['transaction' => false]);
+      
+      // Reiniciar tabla de usuarios
+      $sql = 'DELETE u FROM usuarios u WHERE u.id != :id_usuario OR u.rol NOT IN("admin", "root")';
+      Model::query($sql, ['id_usuario' => $id]);
+    
+      logger (sprintf('Sistema reiniciado por %s con éxito.', $nombre));
 
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));

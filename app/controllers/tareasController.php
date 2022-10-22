@@ -18,10 +18,16 @@ class tareasController extends Controller {
   
   function index()
   {
+    if(!is_admin(get_user_role())){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
     $data = 
     [
-      'title' => 'Reemplazar título',
-      'msg'   => 'Bienvenido al controlador de "tareas", se ha creado con éxito si ves este mensaje.'
+      'title' => 'Todas las tareas',
+      'slug' => 'tareas',
+      'tareas' => tareaModel::all_paginated()
     ];
     
     // Descomentar vista si requerida
@@ -65,6 +71,39 @@ class tareasController extends Controller {
     ];
 
     View::render('ver', $data);
+  }
+
+  function ver_admin($id)
+  {
+    if(!is_profesor(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::to('dashboard');
+    }
+
+      //Validar que exista la lección
+    if (!$tarea = tareaModel::by_id($id)) {
+      Flasher::new('No existe la tarea en la Base de Datos.', 'danger');
+      Redirect::back();    
+    }
+
+    $id_profesor = get_user('id');
+    
+    //Validar el id del profesor y del registro
+    if ($tarea['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();    
+    }
+
+    $data =
+    [
+      'title' => sprintf('Tarea: %s', $tarea['titulo']),
+      'hide_title' => true,
+      'slug' => 'tareas',
+      'id_profesor' => $id_profesor,
+      't' => $tarea
+    ];
+
+    View::render('ver_admin', $data);
   }
 
   function agregar()

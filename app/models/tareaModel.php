@@ -25,6 +25,22 @@ class tareaModel extends Model {
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
+  static function all_paginated()
+  {
+    // Todos los registros paginados
+    $sql = 
+    'SELECT 
+    t.*,
+    u.nombre_completo AS profesor,
+    m.nombre AS materia
+    FROM tareas t
+    LEFT JOIN usuarios u ON u.id = t.id_profesor
+    LEFT JOIN materias m ON m.id = t.id_materia
+    ORDER BY t.id DESC';
+    return PaginationHandler::paginate($sql);
+  }
+
+
   static function by_id($id)
   {
     // Un registro con $id
