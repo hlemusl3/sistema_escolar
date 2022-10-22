@@ -7,6 +7,9 @@
  * Controlador de admin
  */
 class adminController extends Controller {
+  private $id = null;
+  private $rol = null;
+  
   function __construct()
   {
     if (!Auth::validate()) {
@@ -14,7 +17,10 @@ class adminController extends Controller {
       Redirect::to('login');
     }
 
-    if(!is_admin(get_user_role())){
+    $this->id  = get_user('id');
+    $this->rol = get_user_role();
+
+    if(!is_admin($this->rol)){
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();
     }

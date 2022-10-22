@@ -7,17 +7,23 @@
  * Controlador de lecciones
  */
 class leccionesController extends Controller {
+  private $id = null;
+  private $rol = null;
+
   function __construct()
   {
     if (!Auth::validate()) {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
+
+    $this->id = get_user('id');
+    $this->rol = get_user_role();
   }
   
   function index()
   {
-    if(!is_admin(get_user_role())){
+    if(!is_admin($this->rol)){
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();
     }
@@ -35,9 +41,9 @@ class leccionesController extends Controller {
 
   function ver($id)
   {
-    if(!is_profesor(get_user_role())) {
+    if(!is_profesor($this->rol)) {
       Flasher::new(get_notificaciones(), 'danger');
-      Redirect::to('dashboard');
+      Redirect::back();
     }
 
       //Validar que exista la lección
@@ -45,11 +51,9 @@ class leccionesController extends Controller {
       Flasher::new('No existe la lección en la Base de Datos.', 'danger');
       Redirect::back();    
     }
-
-    $id_profesor = get_user('id');
-    
+   
     //Validar el id del profesor y del registro
-    if ($leccion['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+    if ($leccion['id_profesor'] !== $this->id && !is_admin($this->rol)) {
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();    
     }
@@ -58,8 +62,8 @@ class leccionesController extends Controller {
     [
       'title' => sprintf('Lección: %s', $leccion['titulo']),
       'hide_title' => true,
-      'slug' => 'grupos',
-      'id_profesor' => $id_profesor,
+      'slug' => is_admin($this->rol) ? 'lecciones' : 'grupos',
+      'id_profesor' => $this->id,
       'l' => $leccion
     ];
 
@@ -68,7 +72,7 @@ class leccionesController extends Controller {
 
   function ver_admin($id)
   {
-    if(!is_profesor(get_user_role())) {
+    if(!is_profesor($this->rol)) {
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::to('dashboard');
     }
@@ -79,10 +83,10 @@ class leccionesController extends Controller {
       Redirect::back();    
     }
 
-    $id_profesor = get_user('id');
+    $this->id = get_user('id');
     
     //Validar el id del profesor y del registro
-    if ($leccion['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+    if ($leccion['id_profesor'] !== $this->id && !is_admin($this->rol)) {
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();    
     }
@@ -92,7 +96,7 @@ class leccionesController extends Controller {
       'title' => sprintf('Lección: %s', $leccion['titulo']),
       'hide_title' => true,
       'slug' => 'lecciones',
-      'id_profesor' => $id_profesor,
+      'id_profesor' => $this->id,
       'l' => $leccion
     ];
 
@@ -101,20 +105,20 @@ class leccionesController extends Controller {
 
   function agregar()
   {
-    if(!is_profesor(get_user_role())) {
+    if(!is_profesor($this->rol)) {
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::to('dashboard');
     }
 
-    $id_profesor = get_user('id');
+    $this->id = get_user('id');
     $data =
     [
       'title' => 'Agregar nueva lección',
       'slug' => 'grupos',
       'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
-      'id_profesor' => $id_profesor,
+      'id_profesor' => $this->id,
       'id_materia' => isset($_GET["id_materia"]) ? $_GET["id_materia"] : null,
-      'materias_profesor' => materiaModel::materias_profesor($id_profesor)
+      'materias_profesor' => materiaModel::materias_profesor($this->id)
     ];
 
     View::render('agregar', $data);
@@ -128,7 +132,7 @@ class leccionesController extends Controller {
       }
 
       //Validar rol
-      if(!is_profesor(get_user_role())){
+      if(!is_profesor($this->rol)){
         throw new Exception(get_notificaciones());
       }
 
@@ -136,13 +140,13 @@ class leccionesController extends Controller {
       $video = clean($_POST["video"]);
       $contenido = clean($_POST["contenido"], true);
       $id_materia = clean($_POST["id_materia"]);
-      $id_profesor = clean($_POST["id_profesor"]);
+      $this->id = clean($_POST["id_profesor"]);
       $fecha_inicial = clean($_POST["fecha_inicial"]);
       $fecha_max = clean($_POST["fecha_max"]);
       $status = clean($_POST["status"]);
 
       //validar que el profesor exista
-      if(!$profesor = profesorModel::by_id($id_profesor)) {
+      if(!$profesor = profesorModel::by_id($this->id)) {
         throw new Exception('El profesor de la lección no existe en la base de datos.');
       }
 
@@ -152,7 +156,7 @@ class leccionesController extends Controller {
       }
 
       $sql = 'SELECT mp.* FROM materias_profesores mp WHERE mp.id_materia = :id_materia AND mp.id_profesor = :id_profesor';
-      if (!profesorModel::query($sql, ['id_materia' => $id_materia, 'id_profesor' => $id_profesor])) {
+      if (!profesorModel::query($sql, ['id_materia' => $id_materia, 'id_profesor' => $this->id])) {
         throw new Exception(sprintf('El profesor no tiene asignada la materia <b>%s</b>', $materia["nombre"]));
       }
 
@@ -170,7 +174,7 @@ class leccionesController extends Controller {
       $data =
       [
         'id_materia' => $id_materia,
-        'id_profesor' => $id_profesor,
+        'id_profesor' => $this->id,
         'titulo' => $titulo,
         'video' => $video,
         'contenido' => $contenido,
@@ -199,32 +203,32 @@ class leccionesController extends Controller {
 
   function editar($id)
   {
-    if(!is_profesor(get_user_role())) {
+    if(!is_profesor($this->rol)) {
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::to('dashboard');
     }
 
     //Validar que exista la lección
-  if (!$leccion = leccionModel::by_id($id)) {
-    Flasher::new('No existe la lección en la Base de Datos.', 'danger');
-    Redirect::back();    
-  }
-  $id_profesor = get_user('id');
-  //Validar el id del profesor y del registro
-  if ($leccion['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
-    Flasher::new(get_notificaciones(), 'danger');
-    Redirect::back();    
-  }
-    $data =
-    [
-      'title' => sprintf('Lección: %s', $leccion['titulo']),
-      'slug' => 'grupos',
-      'button' => ['url' => sprintf('grupos/materia/%s', $leccion['id_materia']), 'text' => '<i class="fas fa-undo"></i> Lecciones y Tareas'],
-      'id_profesor' => $id_profesor,
-      'l' => $leccion
-    ];
- 
-    View::render('editar', $data);
+    if (!$leccion = leccionModel::by_id($id)) {
+      Flasher::new('No existe la lección en la Base de Datos.', 'danger');
+      Redirect::back();    
+    }
+    $this->id = get_user('id');
+    //Validar el id del profesor y del registro
+    if ($leccion['id_profesor'] !== $this->id && !is_admin($this->rol)) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();    
+    }
+      $data =
+      [
+        'title' => sprintf('Lección: %s', $leccion['titulo']),
+        'slug' => 'grupos',
+        'button' => ['url' => sprintf('grupos/materia/%s', $leccion['id_materia']), 'text' => '<i class="fas fa-undo"></i> Lecciones y Tareas'],
+        'id_profesor' => $this->id,
+        'l' => $leccion
+      ];
+  
+      View::render('editar', $data);
   }
 
   function post_editar()
@@ -235,7 +239,7 @@ class leccionesController extends Controller {
       }
 
       //Validar Rol
-      if(!is_profesor(get_user_role())) {
+      if(!is_profesor($this->rol)) {
         Flasher::new(get_notificaciones(), 'danger');
         Redirect::to('dashboard');
       }
@@ -246,10 +250,8 @@ class leccionesController extends Controller {
         throw new Exception('No existe la lección en la base de datos.');
       }
 
-      $id_profesor = get_user('id');
-
       //Validar el id del profesor y del registro
-      if ($leccion['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+      if ($leccion['id_profesor'] !== $this->id && !is_admin($this->rol)) {
         throw new Exception(get_notificaciones());
       }
 
@@ -305,7 +307,7 @@ class leccionesController extends Controller {
         throw new Exception(get_notificaciones(0));
       }
 
-      if(!is_profesor(get_user_role())) {
+      if(!is_profesor($this->rol)) {
         throw new Exception(get_notificaciones());
       }
   
@@ -314,10 +316,8 @@ class leccionesController extends Controller {
         throw new Exception(get_notificaciones());
       }
 
-      $id_profesor = get_user('id');
-
       //Validar el id del profesor y del registro
-      if ($leccion['id_profesor'] !== $id_profesor && !is_admin(get_user_role())) {
+      if ($leccion['id_profesor'] !== $this->id && !is_admin($this->rol)) {
         throw new Exception(get_notificaciones());
       }
       

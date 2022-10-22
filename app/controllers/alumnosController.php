@@ -7,6 +7,9 @@
  * Controlador de alumnos
  */
 class alumnosController extends Controller {
+  private $id = null;
+  private $rol = null;
+
   function __construct()
   {
     //Validación de la sesión de usuario
@@ -14,11 +17,14 @@ class alumnosController extends Controller {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
+
+    $this->id = get_user('id');
+    $this->rol = get_user_role();
   }
   
   function index()
   {
-    if(!is_admin(get_user_role())){
+    if(!is_admin($this->rol)){
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();
     }
@@ -37,6 +43,11 @@ class alumnosController extends Controller {
 
   function ver($id)
   {
+    if(!is_admin($this->rol)){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
     if(!$alumno = alumnoModel::by_id($id)){
       Flasher::new('No existe el alumno en la base de datos.', 'danger');
       Redirect::back();
@@ -56,6 +67,11 @@ class alumnosController extends Controller {
 
   function agregar()
   {
+    if(!is_admin($this->rol)){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
     $data = 
     [
       'title' => 'Agregar alumno',
@@ -76,7 +92,7 @@ class alumnosController extends Controller {
       }
 
       //validar rol
-      if(!is_admin(get_user_role())){
+      if(!is_admin($this->rol)){
         throw new Exception(get_notificaciones(1));
       }
       
@@ -175,11 +191,6 @@ class alumnosController extends Controller {
 
   }
 
-  function editar($id)
-  {
-    View::render('editar');
-  }
-
   function post_editar()
   {
     try {
@@ -188,7 +199,7 @@ class alumnosController extends Controller {
       }
 
       //validar rol
-      if(!is_admin(get_user_role())){
+      if(!is_admin($this->rol)){
         throw new Exception(get_notificaciones(1));
       }
 
@@ -323,7 +334,7 @@ class alumnosController extends Controller {
       }
 
       //validar rol
-      if(!is_admin(get_user_role())){
+      if(!is_admin($this->rol)){
         throw new Exception(get_notificaciones(1));
       }
 

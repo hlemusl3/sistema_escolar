@@ -65,34 +65,8 @@ class entregasController extends Controller {
     View::render('ver', $data);
   }
 
-  function agregar()
-  {
-    View::render('agregar');
-  }
-
-  function post_agregar()
-  {
-
-  }
-
-  function editar($id)
-  {
-    View::render('editar');
-  }
-
-  function post_editar()
-  {
-
-  }
-
-  function borrar($id)
-  {
-    // Proceso de borrado
-  }
-
   function detalle($id)
   {
-
     $entrega = entregaModel::by_id($id);
     $id_tarea = $entrega['id_tarea'];
     $id_alumno = $entrega['id_alumno'];

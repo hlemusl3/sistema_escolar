@@ -7,7 +7,11 @@
                 <div class="card-header font-weight-bold text-primary">
                     <?php echo sprintf('Lección / <b>%s</b>', $d->l->materia); ?>
                     
-                    <a href="<?php echo sprintf('grupos/materia/%s',$d->l->id_materia); ?>" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar</a>
+                    <?php if(is_admin(get_user_role())): ?>
+                        <a href="lecciones" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar</a>
+                    <?php else: ?>
+                        <a href="<?php echo sprintf('grupos/materia/%s',$d->l->id_materia); ?>" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar</a>
+                    <?php endif; ?>
                 </div>
                 <div class="card-doby">
                     <h2><strong><?php echo $d->l->titulo; ?></strong></h2>

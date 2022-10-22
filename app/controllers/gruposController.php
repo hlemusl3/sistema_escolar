@@ -8,6 +8,9 @@ use \Verot\Upload\Upload;
  * Controlador de grupos
  */
 class gruposController extends Controller {
+  private $id = null;
+  private $rol = null;
+
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida
@@ -15,11 +18,14 @@ class gruposController extends Controller {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
+
+    $this->id = get_user('id');
+    $this->rol = get_user_role();
   }
   
   function index()
   {
-    if(!is_admin(get_user_role())){
+    if(!is_admin($this->rol)){
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();      
     }
@@ -38,7 +44,7 @@ class gruposController extends Controller {
 
   function ver($id)
   {
-    if(!is_admin(get_user_role())){
+    if(!is_admin($this->rol)){
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();      
     }
@@ -61,6 +67,11 @@ class gruposController extends Controller {
 
   function agregar()
   {
+    if(!is_admin($this->rol)){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();      
+    }
+
     $data=
     [
       'title' => 'Agregar Grupo',
@@ -277,6 +288,15 @@ class gruposController extends Controller {
   //Para profesores
   function asignados()
   {
+    if(is_admin($this->rol)){
+      Redirect::to('grupos');      
+    }
+
+    if(!is_profesor($this->rol)){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();      
+    }
+
     $data =
     [
       'title' => 'Grupos Asignados',
@@ -289,7 +309,11 @@ class gruposController extends Controller {
 
   function detalles($id) 
   {
-    if(!is_profesor(get_user_role())){
+    if(is_admin($this->rol)){
+      Redirect::to(sprintf('grupos/ver/%s', $id));      
+    }
+
+    if(!is_profesor($this->rol)){
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();      
     }
@@ -299,10 +323,10 @@ class gruposController extends Controller {
       Redirect::back();
     }
 
-    $grupo['materias'] = grupoModel::materias_asignadas($id, get_user('id'));
+    $grupo['materias'] = grupoModel::materias_asignadas($id, $this->id);
     $grupo['alumnos'] = grupoModel::alumnos_asignados($id);
 
-    if(!profesorModel::asignado_a_grupo(get_user('id'), $id)){
+    if(!profesorModel::asignado_a_grupo($this->id, $id)){
       Flasher::new('No eres profesor de este grupo', 'danger');
       Redirect::to('grupos/asignados');      
     }
@@ -320,6 +344,10 @@ class gruposController extends Controller {
 
   function materia($id)
   {
+    if(is_admin($this->rol)){
+      Redirect::to(sprintf('materias/ver/%s', $id));      
+    }
+
     if (!is_profesor(get_user_role())) {
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();
@@ -330,7 +358,7 @@ class gruposController extends Controller {
       Redirect::to('materias');
     }
 
-    if(empty(materiaModel::by_id_profesor(get_user('id'), $id))){
+    if(empty(materiaModel::by_id_profesor($this->id, $id))){
       Flasher::new('La materia no está asignada al profesor.', 'danger');
       Redirect::to('materias');
     }
@@ -342,8 +370,8 @@ class gruposController extends Controller {
       'title2' => sprintf('Tareas disponibles para %s', $materia['nombre']),
       'slug' => 'grupos',
       'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
-      'lecciones' => leccionModel::by_materia_profesor($id, get_user('id')),
-      'tareas' => tareaModel::by_materia_profesor($id, get_user('id')),
+      'lecciones' => leccionModel::by_materia_profesor($id, $this->id),
+      'tareas' => tareaModel::by_materia_profesor($id, $this->id),
       'materia' => $materia
     ];
   

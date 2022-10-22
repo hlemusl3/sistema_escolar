@@ -1,6 +1,5 @@
 <?php
 use \Verot\Upload\Upload;
-
 /**
  * Plantilla general de controladores
  * Versión 1.0.2
@@ -9,6 +8,7 @@ use \Verot\Upload\Upload;
  */
 class alumnoController extends Controller {
   private $id_alumno = null;
+  private $rol = null;
 
   function __construct()
   {
@@ -18,13 +18,18 @@ class alumnoController extends Controller {
       Redirect::to('login');
     }
 
-    if(!is_alumno(get_user_role())) {
+    //Inicializo valores de propiedades
+    $this->id_alumno = get_user('id');
+    $this->rol = get_user_role();
+    
+    if(is_admin($this->rol)){
+      Redirect::to('alumnos');
+    }
+
+    if(!is_alumno($this->rol)) {
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::back();
     }
-
-    //Inicializo valores de propiedades
-    $this->id_alumno = get_user('id');
   }
   
   function index()

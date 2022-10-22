@@ -796,6 +796,10 @@ function add_materia_profesor()
       $sql = 'TRUNCATE TABLE lecciones';
       Model::query($sql, [], ['transaction' => false]);
 
+      // Reiniciar tabla de posts
+      $sql = 'TRUNCATE TABLE posts';
+      Model::query($sql, [], ['transaction' => false]);
+
       // Reiniciar tabla de tareas
       $sql = 'TRUNCATE TABLE tareas';
       Model::query($sql, [], ['transaction' => false]);
@@ -808,8 +812,9 @@ function add_materia_profesor()
       $sql = 'DELETE u FROM usuarios u WHERE u.id != :id_usuario OR u.rol NOT IN("admin", "root")';
       Model::query($sql, ['id_usuario' => $id]);
     
-      logger (sprintf('Sistema reiniciado por %s con éxito.', $nombre));
-
+      logger(sprintf('Sistema reiniciado por %s con éxito.', $nombre));
+      json_output(json_build(200, null, 'Sistema reiniciado con éxito.'));
+      
     } catch (Exception $e) {
       json_output(json_build(400, null, $e->getMessage()));
     } catch (PDOException $e) {

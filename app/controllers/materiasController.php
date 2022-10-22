@@ -50,7 +50,7 @@ class materiasController extends Controller {
     $data = 
     [
       'title' => sprintf('Viendo %s', $materia['nombre']),
-      'slug' => 'materias',
+      'slug' => is_admin($this->rol) ? 'tareas' : 'grupos',
       'button' => ['url' => 'materias', 'text' => '<i class="fas fa-table"></i> Materias'],
       'm' => $materia
     ];

@@ -6,8 +6,12 @@
             <div class="card shadow mb-4">
                 <div class="card-header font-weight-bold text-primary">
                     <?php echo sprintf('Tarea / <b>%s</b>', $d->t->materia); ?>
-                    
-                    <a href="<?php echo sprintf('grupos/materia/%s',$d->t->id_materia); ?>" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar</a>
+
+                    <?php if(is_admin(get_user_role())): ?>
+                        <a href="tareas" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar</a>
+                    <?php else: ?>
+                        <a href="<?php echo sprintf('grupos/materia/%s',$d->t->id_materia); ?>" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar</a>
+                    <?php endif; ?>                    
                 </div>
                 <div class="card-doby">
                     <h2><strong><?php echo $d->t->titulo; ?></strong></h2>

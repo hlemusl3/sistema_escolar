@@ -1329,13 +1329,13 @@ function remover_suspension_alumno(e) {
     }).done(function(res) {
       if(res.status === 200) {
         toastr.success(res.msg, '¡Bien!');
-      }else {
+      } else {
         toastr.error(res.msg, '¡Upss!');
       }
     }).fail(function(err) {
-      toastr.error('Hubo un error en la petición.', '¡Upss!');
+      toastr.error('Hubo un error en la petición', '¡Upss!');
     }).always(function() {
       button.waitMe('hide');
-    });
+    })
   }
 });
