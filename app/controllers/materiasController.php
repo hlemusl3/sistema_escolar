@@ -7,6 +7,9 @@
  * Controlador de materias
  */
 class materiasController extends Controller {
+  private $id = null;
+  private $rol = null;
+
   function __construct()
   {
     // Validación de sesión de usuario, descomentar si requerida
@@ -14,6 +17,9 @@ class materiasController extends Controller {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
+
+    $this->id = get_user('id');
+    $this->rol = get_user_role();
   }
   
   function index()
@@ -50,7 +56,7 @@ class materiasController extends Controller {
     $data = 
     [
       'title' => sprintf('Viendo %s', $materia['nombre']),
-      'slug' => is_admin($this->rol) ? 'tareas' : 'grupos',
+      'slug' => 'materias',
       'button' => ['url' => 'materias', 'text' => '<i class="fas fa-table"></i> Materias'],
       'm' => $materia
     ];
@@ -132,7 +138,7 @@ class materiasController extends Controller {
       }
 
       Flasher::new(sprintf('Materia <b>%s</b> agregada con éxito.', $nombre), 'success');
-      Redirect::back();
+      Redirect::to('materias');
 
     } catch (PDOException $e) { //Excepciones de errores por la db
       Flasher::new($e->getMessage(), 'danger');
@@ -186,7 +192,7 @@ class materiasController extends Controller {
       }
 
       Flasher::new(sprintf('Materia <b>%s</b> actualizada con éxito.', $nombre), 'success');
-      Redirect::back();
+      Redirect::to('materias');
 
     } catch (PDOException $e) { //Excepciones de errores por la db
       Flasher::new($e->getMessage(), 'danger');

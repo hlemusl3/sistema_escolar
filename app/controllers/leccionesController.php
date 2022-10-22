@@ -62,7 +62,7 @@ class leccionesController extends Controller {
     [
       'title' => sprintf('Lección: %s', $leccion['titulo']),
       'hide_title' => true,
-      'slug' => is_admin($this->rol) ? 'lecciones' : 'grupos',
+      'slug' => is_admin($this->rol) ? 'lecciones' : (is_profesor($this->rol) ? 'materias' : 'grupos'),
       'id_profesor' => $this->id,
       'l' => $leccion
     ];
@@ -114,7 +114,7 @@ class leccionesController extends Controller {
     $data =
     [
       'title' => 'Agregar nueva lección',
-      'slug' => 'grupos',
+      'slug' => 'materias',
       'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
       'id_profesor' => $this->id,
       'id_materia' => isset($_GET["id_materia"]) ? $_GET["id_materia"] : null,
@@ -222,7 +222,7 @@ class leccionesController extends Controller {
       $data =
       [
         'title' => sprintf('Lección: %s', $leccion['titulo']),
-        'slug' => 'grupos',
+        'slug' => 'materias',
         'button' => ['url' => sprintf('grupos/materia/%s', $leccion['id_materia']), 'text' => '<i class="fas fa-undo"></i> Lecciones y Tareas'],
         'id_profesor' => $this->id,
         'l' => $leccion

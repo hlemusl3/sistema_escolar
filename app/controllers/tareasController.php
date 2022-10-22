@@ -7,12 +7,18 @@ use \Verot\Upload\Upload;
  * Controlador de tareas
  */
 class tareasController extends Controller {
+  private $id = null;
+  private $rol = null;
+
   function __construct()
   {
     if (!Auth::validate()) {
       Flasher::new('Debes iniciar sesión primero.', 'danger');
       Redirect::to('login');
     }
+
+    $this->id = get_user('id');
+    $this->rol = get_user_role();
     
   }
   
@@ -63,7 +69,7 @@ class tareasController extends Controller {
     [
       'title' => sprintf('Tarea: %s', $tarea['titulo']),
       'hide_title' => true,
-      'slug' => 'grupos',
+      'slug' => is_admin($this->rol) ? 'tareas' : (is_profesor($this->rol) ? 'materias' : 'grupos'),
       'id_profesor' => $id_profesor,
       'id_tarea' => $tarea['id'],
       't' => $tarea,
@@ -117,7 +123,7 @@ class tareasController extends Controller {
     $data =
     [
       'title' => 'Agregar nueva tarea',
-      'slug' => 'grupos',
+      'slug' => 'materias',
       'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
       'id_profesor' => $id_profesor,
       'id_materia' => isset($_GET["id_materia"]) ? $_GET["id_materia"] : null,
@@ -252,7 +258,7 @@ class tareasController extends Controller {
     $data =
     [
       'title' => sprintf('Tarea: %s', $tarea['titulo']),
-      'slug' => 'grupos',
+      'slug' => 'materias',
       'button' => ['url' => sprintf('grupos/materia/%s', $tarea['id_materia']), 'text' => '<i class="fas fa-undo"></i> Lecciones y Tarea'],
       'id_profesor' => $id_profesor,
       't' => $tarea

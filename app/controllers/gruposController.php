@@ -123,7 +123,7 @@ class gruposController extends Controller {
       }
 
       Flasher::new(sprintf('Nuevo grupo <b>%s</b> agregado con éxito.', $nombre), 'success');
-      Redirect::back();
+      Redirect::to('grupos');
 
     } catch (PDOException $e) { //Excepciones de errores por la db
       Flasher::new($e->getMessage(), 'danger');
@@ -368,7 +368,7 @@ class gruposController extends Controller {
       'title' => sprintf('Lecciones y tareas de %s', $materia['nombre']),
       'title1' => sprintf('Lecciones disponibles para %s', $materia['nombre']),
       'title2' => sprintf('Tareas disponibles para %s', $materia['nombre']),
-      'slug' => 'grupos',
+      'slug' => 'materias',
       'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
       'lecciones' => leccionModel::by_materia_profesor($id, $this->id),
       'tareas' => tareaModel::by_materia_profesor($id, $this->id),

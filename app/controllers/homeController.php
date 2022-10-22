@@ -13,8 +13,7 @@ class homeController extends Controller {
     ];
 
     register_to_bee_obj('bee_var', 'Súper Bee Var');
-
-    View::render('index', $data);
+    Redirect::back();
   }
 
   function test()
