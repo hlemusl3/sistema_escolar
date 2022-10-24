@@ -88,6 +88,7 @@ static function asignar_materia($id_profesor, $id_materia)
     $grupos = 0;
     $alumnos = 0;
     $lecciones = 0;
+    $tareas = 0;
 
     $sql = 
     'SELECT
@@ -126,12 +127,16 @@ static function asignar_materia($id_profesor, $id_materia)
     $sql = 'SELECT COUNT(l.id) AS total FROM lecciones l WHERE l.id_profesor = :id';
     $lecciones = parent::query($sql, ['id' => $id_profesor])[0]['total'];
 
+    $sql = 'SELECT COUNT(t.id) AS total FROM tareas t WHERE t.id_profesor = :id';
+    $tareas = parent::query($sql, ['id' => $id_profesor])[0]['total'];
+
     return
     [
       'materias' => $materias,
       'grupos' => $grupos,
       'alumnos' => $alumnos,
-      'lecciones' => $lecciones
+      'lecciones' => $lecciones,
+      'tareas' => $tareas
     ];
   }
 

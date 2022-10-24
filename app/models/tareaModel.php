@@ -21,7 +21,15 @@ class tareaModel extends Model {
   static function all()
   {
     // Todos los registros
-    $sql = 'SELECT * FROM tareas ORDER BY id DESC';
+    $sql = 
+    'SELECT 
+    t.*, 
+    u.nombre_completo AS profesor,
+    m.nombre AS materia
+    FROM tareas t
+    LEFT JOIN usuarios u ON u.id = id_profesor
+    LEFT JOIN materias m ON m.id = t.id_materia
+    ORDER BY t.id DESC';
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
@@ -136,6 +144,16 @@ class tareaModel extends Model {
     return PaginationHandler::paginate($sql, $data);
   }
 
-
+  static function by_profesor($id)
+  {
+    // Todos los registros
+    $sql = 'SELECT 
+    t.*,
+    m.nombre AS materia
+    FROM tareas t 
+    LEFT JOIN materias m ON m.id = t.id_materia
+    WHERE t.id_profesor = :id
+    ORDER BY t.id DESC';
+    return ($rows = parent::query($sql, ['id' => $id])) ? $rows : [];
+  }
 }
-

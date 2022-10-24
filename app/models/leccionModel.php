@@ -21,7 +21,14 @@ class leccionModel extends Model {
   static function all()
   {
     // Todos los registros
-    $sql = 'SELECT * FROM lecciones ORDER BY id DESC';
+    $sql = 'SELECT 
+    l.*,
+    u.nombre_completo AS profesor,
+    m.nombre AS materia
+    FROM lecciones l
+    LEFT JOIN usuarios u ON u.id = l.id_profesor
+    LEFT JOIN materias m ON m.id = l.id_materia
+    ORDER BY l.id DESC';
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
@@ -181,5 +188,19 @@ class leccionModel extends Model {
 
     return parent::query($sql, ['ano' => $año]);
   }
+
+  static function by_profesor($id)
+  {
+    // Todos los registros
+    $sql = 'SELECT 
+    l.*,
+    m.nombre AS materia
+    FROM lecciones l
+    LEFT JOIN materias m ON m.id = l.id_materia
+    WHERE l.id_profesor = :id
+    ORDER BY l.id DESC';
+    return ($rows = parent::query($sql, ['id' => $id])) ? $rows : [];
+  }
+
 }
 

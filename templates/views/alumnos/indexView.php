@@ -6,7 +6,7 @@
                             <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title; ?></h6>
                         </div>
                         <div class="card-body">
-                            <?php if(!empty($d->alumnos->rows)): ?>
+                            <?php if(!empty($d->alumnos)): ?>
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
@@ -19,7 +19,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($d->alumnos->rows as $a): ?>
+                                            <?php foreach ($d->alumnos as $a): ?>
                                             <tr>
                                                 <td><?php echo sprintf('<a href="alumnos/ver/%s">%s</a>', $a->id, $a->numero); ?></td>
                                                 <td><?php echo empty($a->nombre_completo) ? '<span class="text-muted">Sin nombre</span>' : add_ellipsis($a->nombre_completo, 50); ?></td>
@@ -45,7 +45,6 @@
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
-                                    <?php echo $d->alumnos->pagination; ?>
                                 </div>
                             <?php else: ?>
                             <div class="py-5 text-center">

@@ -13,17 +13,39 @@
                 Menú
             </div>
 
-            <!-- Profesores -->
+            <!-- Grupos -->
             <li class="nav-item <?php echo $slug === 'grupos' ? 'active' : null; ?>">
                 <a class="nav-link" href="grupos/asignados">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Grupos</span></a>
             </li>
 
+            <!-- Materias -->
             <li class="nav-item <?php echo $slug === 'materias' ? 'active' : null; ?>">
                 <a class="nav-link" href="materias/asignadas">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Materias</span></a>
+            </li>
+
+            <!-- Alumnos -->
+            <li class="nav-item <?php echo $slug === 'alumnos' ? 'active' : null; ?>">
+                <a class="nav-link" href="alumnos/asignados">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Alumnos</span></a>
+            </li>
+
+            <!-- Mis lecciones -->
+            <li class="nav-item <?php echo $slug === 'lecciones' ? 'active' : null; ?>">
+                <a class="nav-link" href="lecciones/mislecciones">
+                    <i class="fas fa-fw fa-chalkboard-teacher"></i>
+                    <span>Lecciones</span></a>
+            </li>
+
+            <!-- Mis tareas -->
+            <li class="nav-item <?php echo $slug === 'tareas' ? 'active' : null; ?>">
+                <a class="nav-link" href="tareas/mistareas">
+                    <i class="fas fa-fw fa-layer-group"></i>
+                    <span>Tareas</span></a>
             </li>
 
             <!-- Divider -->

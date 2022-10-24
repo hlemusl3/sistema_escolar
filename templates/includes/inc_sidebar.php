@@ -3,7 +3,16 @@
 ?>
 
 <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<?php $rol = get_user_role(); ?>
+
+    <?php if(is_admin($rol)): ?>
+        <ul class="navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <?php elseif(is_profesor($rol)): ?>
+        <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
+    <?php elseif(is_alumno($rol)): ?>
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <?php endif; ?>
+
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo URL; ?>">
@@ -15,7 +24,6 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-<?php $rol = get_user_role(); ?>
             <?php if (is_admin($rol)): ?>
                 <?php require_once INCLUDES.'inc_sidebar_admin.php';?>
             <?php elseif(is_profesor($rol)): ?>

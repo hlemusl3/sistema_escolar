@@ -170,7 +170,10 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo get_user('nombre_completo'); ?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo get_user('nombre_completo'); ?>
+                                    <span class="d-block text-muted text-right"><?php echo sprintf('<strong>%s</strong>', get_user('rol') ); ?></span>
+                                </span>
+
                                 <img class="img-profile rounded-circle"
                                     src="<?php echo IMAGES.'undraw_profile.svg'; ?>">
                             </a>

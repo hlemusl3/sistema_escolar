@@ -8,9 +8,9 @@
                     <?php echo sprintf('Lección / <b>%s</b>', $d->l->materia); ?>
                     
                     <?php if(is_admin(get_user_role())): ?>
-                        <a href="lecciones" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar</a>
+                        <a href="javascript:history.back()" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar atrás</a>
                     <?php else: ?>
-                        <a href="<?php echo sprintf('grupos/materia/%s',$d->l->id_materia); ?>" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar</a>
+                        <a href="javascript:history.back()" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Regresar atrás</a>
                     <?php endif; ?>
                 </div>
                 <div class="card-doby">

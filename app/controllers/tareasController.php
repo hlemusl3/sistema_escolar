@@ -33,7 +33,7 @@ class tareasController extends Controller {
     [
       'title' => 'Todas las tareas',
       'slug' => 'tareas',
-      'tareas' => tareaModel::all_paginated()
+      'tareas' => tareaModel::all()
     ];
     
     // Descomentar vista si requerida
@@ -425,4 +425,24 @@ class tareasController extends Controller {
       Redirect::back();
     }
   }
+
+  function mistareas()
+  {
+    if(!is_profesor($this->rol)){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
+    $tareas = tareaModel::by_profesor($this->id);
+    $data =
+    [
+      'title' => 'Mis tareas',
+      'slug' => 'tareas',
+      
+      'tareas' => $tareas
+    ];
+
+    View::render('mistareas',$data);
+  }
+
 }

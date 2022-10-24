@@ -28,7 +28,7 @@ class profesoresController extends Controller {
       'title' => 'Todos los profesores',
       'slug' => 'profesores',
       'button' => ['url' => buildURL('profesores/agregar'), 'text' => '<i class="fas fa-plus"></i> Agregar profesor'],
-      'profesores' => profesorModel::all_paginated()
+      'profesores' => profesorModel::all()
     ];
     
     // Descomentar vista si requerida

@@ -6,29 +6,22 @@
                             <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title; ?></h6>
                         </div>
                         <div class="card-body">
-                            <?php if(!empty($d->materias)): ?>
+                            <?php if(!empty($d->alumnos)): ?>
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-<!--                                                <th width="5%">#</th> -->
-                                                <th>Nombre</th>
-                                                <th width="10%">Acción</th>
+                                                <th>Nombre completo</th>
+                                                <th>Grupos</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($d->materias as $m): ?>
+                                            <?php foreach ($d->alumnos as $a): ?>
                                             <tr>
-<!--                                                <td><?php echo sprintf('<a href="materias/ver/%s">%s</a>', $m->id, $m->id); ?></td> -->
-                                                <td><?php echo add_ellipsis($m->nombre, 50); ?></td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <a href="<?php echo 'materias/ver/'.$m->id; ?>" class="btn btn-sm btn-success"><i class="fas fa-eye"></i></a>
-                                                        <a href="<?php echo buildURL('materias/borrar/'.$m->id); ?>" class="btn btn-sm btn-danger confirmar"><i class="fas fa-trash"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                <td><a href="<?php echo sprintf('alumnos/detalle/%s', $a->id_alumno)?>" class="text-muted"><?php echo empty($a->alumno) ? '<span class="text-muted">Sin nombre</span>' : add_ellipsis($a->alumno, 50); ?></a></td>
+                                                <td><a href="<?php echo sprintf('grupos/detalles/%s', $a->id_grupo)?>"><?php echo empty($a->grupo) ? '<span class="text-muted">Sin nombre</span>' : add_ellipsis($a->grupo, 50); ?></a></td>
                                             
+                                            </tr>
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>

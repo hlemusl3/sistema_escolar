@@ -35,7 +35,7 @@ class gruposController extends Controller {
       'title'  => 'Todos los grupos',
       'slug'   => 'grupos',
       'button' => ['url' => 'grupos/agregar', 'text' => '<i class="fas fa-plus"></i> Agregar grupo'],
-      'grupos' => grupoModel::all_paginated()
+      'grupos' => grupoModel::all()
     ];
     
     // Descomentar vista si requerida

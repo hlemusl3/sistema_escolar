@@ -6,7 +6,7 @@
                             <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title; ?></h6>
                         </div>
                         <div class="card-body">
-                            <?php if(!empty($d->grupos->rows)): ?>
+                            <?php if(!empty($d->grupos)): ?>
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
@@ -18,7 +18,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($d->grupos->rows as $g): ?>
+                                            <?php foreach ($d->grupos as $g): ?>
                                             <tr>
                                                 <td><?php echo sprintf('<a href="grupos/ver/%s">%s</a>', $g->id, $g->numero); ?></td>
                                                 <td><?php echo add_ellipsis($g->nombre, 50); ?></td>
@@ -42,7 +42,6 @@
                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
-                                    <?php echo $d->grupos->pagination; ?>
                                 </div>
                             <?php else: ?>
                             <div class="py-5 text-center">

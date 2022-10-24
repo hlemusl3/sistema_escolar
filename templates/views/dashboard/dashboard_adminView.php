@@ -4,8 +4,8 @@
 <div class="row">
 
 						<!-- Total de materias -->
-						<div class="col-xl-2 col-md-6 mb-4">
-							<div class="card border-left-primary shadow h-100 py-2">
+						<div class="col-xl-2 col-md-6 mb-4" >
+							<a href="materias" class="card border-left-primary shadow h-100 py-2" style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -13,16 +13,16 @@
 											<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $d->stats->materias; ?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-book fa-2x text-gray-300"></i>
+											<i class="fas fa-book fa-2x text-primary"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 
 						<!-- Total de grupos -->
 						<div class="col-xl-2 col-md-6 mb-4">
-							<div class="card border-left-success shadow h-100 py-2">
+							<a href="grupos" class="card border-left-success shadow h-100 py-2" style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -30,16 +30,16 @@
 											<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $d->stats->grupos?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-user-friends fa-2x text-gray-300"></i>
+											<i class="fas fa-user-friends fa-2x text-success"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 
 						<!-- Total de alumnos -->
 						<div class="col-xl-2 col-md-6 mb-4">
-							<div class="card border-left-info shadow h-100 py-2">
+							<a href="alumnos" class="card border-left-info shadow h-100 py-2" style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -47,16 +47,16 @@
 											<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $d->stats->alumnos?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-book-reader fa-2x text-gray-300"></i>
+											<i class="fas fa-book-reader fa-2x text-info"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 
 						<!-- Total de profesores -->
 						<div class="col-xl-2 col-md-6 mb-4">
-							<div class="card border-left-secondary shadow h-100 py-2">
+							<a href="profesores" class="card border-left-secondary shadow h-100 py-2" style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -64,16 +64,16 @@
 											<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $d->stats->profesores?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-users fa-2x text-gray-300"></i>
+											<i class="fas fa-users fa-2x text-secondary"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 
 						<!-- Total de Lecciones -->
 						<div class="col-xl-2 col-md-6 mb-4">
-							<div class="card border-left-warning shadow h-100 py-2">
+							<a href="lecciones" class="card border-left-warning shadow h-100 py-2"style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -81,16 +81,16 @@
 											<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $d->stats->lecciones; ?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-chalkboard-teacher fa-2x text-gray-300"></i>
+											<i class="fas fa-chalkboard-teacher fa-2x text-warning"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 
 						<!-- Total de Tareas -->
 						<div class="col-xl-2 col-md-6 mb-4">
-							<div class="card border-left-danger shadow h-100 py-2">
+							<a href="tareas" class="card border-left-danger shadow h-100 py-2" style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
@@ -98,11 +98,11 @@
 											<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $d->stats->tareas; ?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-layer-group fa-2x text-gray-300"></i>
+											<i class="fas fa-layer-group fa-2x text-danger"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 </div>
 
@@ -115,7 +115,7 @@
 								<!-- Card Header - Dropdown -->
 								<div
 									class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">Resumen de enseñanza</h6>
+									<h6 class="m-0 font-weight-bold text-primary">Gráfica: Cantidad de lecciones por mes</h6>
 									<div class="dropdown no-arrow">
 										<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
 											data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

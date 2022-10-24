@@ -32,7 +32,7 @@ class leccionesController extends Controller {
     [
       'title' => 'Todas las lecciones',
       'slug' => 'lecciones',
-      'lecciones' => leccionModel::all_paginated()
+      'lecciones' => leccionModel::all()
     ];
     
     // Descomentar vista si requerida
@@ -336,5 +336,24 @@ class leccionesController extends Controller {
       Flasher::new($e->getMessage(), 'danger');
       Redirect::back();
     }
+  }
+
+  function mislecciones()
+  {
+    if(!is_profesor($this->rol)){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
+    $lecciones = leccionModel::by_profesor($this->id);
+    $data =
+    [
+      'title' => 'Mis lecciones',
+      'slug' => 'lecciones',
+      
+      'lecciones' => $lecciones
+    ];
+
+    View::render('mislecciones',$data);
   }
 }

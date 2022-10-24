@@ -97,12 +97,12 @@ $(document).ready(function() {
         emptyTable: "No hay información.",
         paginate: {
           first: "Primera",
-          previos: "Anterior",
+          previous: "Anterior",
           next: "Siguiente",
           last: "Última"
         }
       },
-      paging: false,
+      paging: true,
       aaSorting: []
     }
   );

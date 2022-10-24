@@ -34,7 +34,7 @@ class alumnosController extends Controller {
       'title' => 'Todos los alumnos',
       'slug' => 'alumnos',
       'button' => ['url' => 'alumnos/agregar', 'text' => '<i class="fas fa-plus"></i> Agregar alumno'],
-      'alumnos' => alumnoModel::all_paginated()
+      'alumnos' => alumnoModel::all()
     ];
     
     // Descomentar vista si requerida
@@ -363,5 +363,22 @@ class alumnosController extends Controller {
       Flasher::new($e->getMessage(), 'danger');
       Redirect::back();
     }
+  }
+
+  function asignados()
+  {
+    if(!is_profesor($this->rol)) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
+    $alumnos = alumnoModel::by_profesor($this->id);
+    $data = 
+    [
+      'title' => 'Mis alumnos',
+      'slug' => 'alumnos',
+      'alumnos' =>$alumnos
+    ];
+    View::render('asignados', $data);
   }
 }

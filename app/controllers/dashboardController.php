@@ -38,6 +38,7 @@ class dashboardController extends Controller {
     } else if (is_alumno($rol)){
 
       $data ['grupo'] = grupoModel::by_alumno(get_user('id'));
+      $data['stats'] = alumnoModel::stats_by_id(get_user('id'));
       View::render('dashboard_alumno', $data);
 
     } else {

@@ -4,7 +4,11 @@
     <div class="col-xl-12 col-md-6">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title; ?></h6>
+                <h6 class="m-0 font-weight-bold text-primary"><?php echo $d->title; ?>
+                <div div class="btn-group float-right">
+                    <a class="btn btn-success btn-sm" href="lecciones/agregar"><i class="fas fa-plus"></i> <b>Agregar Lección</b></a>
+                </div>
+                </h6>
             </div>
             <div class="card-body">
                 <?php if(!empty($d->lecciones)): ?>
@@ -14,6 +18,7 @@
                                             <tr>
                                                 <th width="10%"></th>
                                                 <th>Título de la lección</th>
+                                                <th>Materia</th>
                                                 <th width="10%">Estado</th>
                                                 <th width="20%">Fecha Máxima</th>
                                                 <th width="10%">Acción</th>
@@ -23,7 +28,7 @@
                                             <?php foreach($d->lecciones as $l): ?>
                                                 <tr>
                                                     <td>
-                                                        <a href="<?php echo sprintf('lecciones/ver_admin/%s', $l->id); ?>" >
+                                                        <a href="<?php echo sprintf('lecciones/ver/%s', $l->id); ?>" >
                                                             <img src="<?php echo get_image('player.png'); ?>" alt="<?php echo $l->titulo;?>" class="img-fluid" style="width: 30px;">
                                                         </a>
                                                     </td>
@@ -36,8 +41,13 @@
                                                                 </span>
                                                             <?php endif; ?>
                                                         </span>
-                                                        <small class="d-block text-muted"><?php echo sprintf('<strong>%s</strong> / %s', $l->profesor, $l->materia); ?></small>
                                                     </td>
+                                                    <td>
+                                                        <span class="text-dark">
+                                                            <?php echo add_ellipsis($l->materia, 100); ?>
+                                                        </span>
+                                                    </td>
+
                                                     <td>
                                                         <span class="text-dark">
                                                             <?php echo format_estado_leccion($l->status); ?>
@@ -50,7 +60,8 @@
                                                     </td>
                                                     <td>
                                                         <div class="btn-group float-right">
-                                                            <a class="btn btn-success btn-sm" href="<?php echo sprintf('lecciones/ver_admin/%s', $l->id); ?>"><i class="fas fa-eye"></i></a>                                        
+                                                            <a class="btn btn-success btn-sm" href="<?php echo sprintf('lecciones/ver/%s', $l->id); ?>"><i class="fas fa-eye"></i></a>                                        
+                                                            <a class="btn btn-success btn-sm" href="<?php echo sprintf('lecciones/editar/%s', $l->id); ?>"><i class="fas fa-edit"></i></a>                                        
                                                             <a class="btn btn-danger btn-sm confirmar" href="<?php echo buildURL(sprintf('lecciones/borrar/%s', $l->id)); ?>"><i class="fas fa-trash"></i></a>                                        
                                                         </div>
                                                     </td>

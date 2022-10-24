@@ -4,54 +4,71 @@
 <div class="row">
 
 						<!-- Earnings (Monthly) Card Example -->
-						<div class="col-xl-3 col-md-6 mb-4">
-							<div class="card border-left-primary shadow h-100 py-2">
+						<div href="" class="col-xl-3 col-md-6 mb-4">
+							<a href="alumno/grupo" class="card border-left-primary shadow h-100 py-2" style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
 											<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Grupo</div>
-											<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo empty($d->grupo) ? 'Sin grupo asignado' : sprintf('<a href="alumno/grupo">%s</a>', $d->grupo->nombre)?></div>
+											<div class="h5 mb-0 font-weight-bold text-muted"><?php echo empty($d->grupo) ? 'Sin grupo asignado' : $d->grupo->nombre ;?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-user-friends fa-2x text-gray-300"></i>
+											<i class="fas fa-users fa-2x text-primary"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 
 						<!-- Earnings (Monthly) Card Example -->
 						<div class="col-xl-3 col-md-6 mb-4">
-							<div class="card border-left-success shadow h-100 py-2">
+							<a href="alumno/grupo" class="card border-left-success shadow h-100 py-2" style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
 											<div class="text-xs font-weight-bold text-success text-uppercase mb-1">Materias</div>
-											<div class="h5 mb-0 font-weight-bold text-gray-800"><a href="alumno/grupo">Ver materias</a></div>
+											<div class="h5 mb-0 font-weight-bold text-muted"><?php echo $d->stats->materias?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-book fa-2x text-gray-300"></i>
+											<i class="fas fa-book fa-2x text-success"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
 						</div>
 
 						<!-- Earnings (Monthly) Card Example -->
 						<div class="col-xl-3 col-md-6 mb-4">
-							<div class="card border-left-info shadow h-100 py-2">
+							<a href="alumno/lecciones" class="card border-left-info shadow h-100 py-2" style="text-decoration: none">
 								<div class="card-body">
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
 											<div class="text-xs font-weight-bold text-info text-uppercase mb-1">Lecciones</div>
-											<div class="h5 mb-0 font-weight-bold text-gray-800"><a href="alumno/lecciones">Continuar</a></div>
+											<div class="h5 mb-0 font-weight-bold text-muted"><?php echo $d->stats->lecciones?></div>
 										</div>
 										<div class="col-auto">
-											<i class="fas fa-layer-group fa-2x text-gray-300"></i>
+											<i class="fas fa-chalkboard-teacher fa-2x text-info"></i>
 										</div>
 									</div>
 								</div>
-							</div>
+							</a>
+						</div>
+
+						<!-- Earnings (Monthly) Card Example -->
+						<div class="col-xl-3 col-md-6 mb-4">
+							<a href="alumno/tareas" class="card border-left-danger shadow h-100 py-2" style="text-decoration: none">
+								<div class="card-body">
+									<div class="row no-gutters align-items-center">
+										<div class="col mr-2">
+											<div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Tareas</div>
+											<div class="h5 mb-0 font-weight-bold text-muted"><?php echo $d->stats->tareas?></div>
+										</div>
+										<div class="col-auto">
+											<i class="fas fa-layer-group fa-2x text-danger"></i>
+										</div>
+									</div>
+								</div>
+							</a>
 						</div>
 
 </div>
