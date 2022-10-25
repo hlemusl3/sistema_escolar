@@ -66,7 +66,6 @@ class alumnoController extends Controller {
       'slug' => 'alumno-lecciones',
       'lecciones' => leccionModel::by_alumno($this->id_alumno, $publicadas, $id_materia, $id_profesor)
     ];
-
     View::render('lecciones', $data);
   }
 

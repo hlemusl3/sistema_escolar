@@ -100,7 +100,7 @@ class tareaModel extends Model {
         LEFT JOIN grupos g ON g.id = gm.id_grupo
         JOIN grupos_alumnos ga ON ga.id_grupo = g.id
         WHERE ga.id_alumno = :id_alumno AND t.status IN("publica") '.($id_materia === null || $id_profesor === null ? '' : 'AND t.id_materia = :id_materia AND t.id_profesor = :id_profesor').
-        ' ORDER BY m.id DESC, t.fecha_inicial DESC';
+        ' ORDER BY t.fecha_disponible DESC';
     
         $data =
         [
@@ -112,7 +112,7 @@ class tareaModel extends Model {
           $data['id_profesor'] = $id_profesor;
         }
     
-        return PaginationHandler::paginate($sql, $data);      
+        return ($rows = parent::query($sql, $data)) ? $rows : [];      
     }
 
     // Todas las tareas sin importar su status
@@ -129,7 +129,8 @@ class tareaModel extends Model {
     LEFT JOIN grupos_materias gm ON gm.id_mp = mp.id
     LEFT JOIN grupos g ON g.id = gm.id_grupo
     JOIN grupos_alumnos ga ON ga.id_grupo = g.id
-    WHERE ga.id_alumno = :id_alumno '.($id_materia === null || $id_profesor === null ? '' : 'AND t.id_materia = :id_materia AND t.id_profesor = :id_profesor');
+    WHERE ga.id_alumno = :id_alumno '.($id_materia === null || $id_profesor === null ? '' : 'AND t.id_materia = :id_materia AND t.id_profesor = :id_profesor').
+    ' ORDER BY t.fecha_disponible DESC';
 
     $data =
     [
@@ -141,7 +142,7 @@ class tareaModel extends Model {
       $data['id_profesor'] = $id_profesor;
     }
 
-    return PaginationHandler::paginate($sql, $data);
+    return ($rows = parent::query($sql, $data)) ? $rows : [];
   }
 
   static function by_profesor($id)

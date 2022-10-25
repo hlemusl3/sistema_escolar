@@ -72,7 +72,7 @@ class leccionesController extends Controller {
 
   function ver_admin($id)
   {
-    if(!is_profesor($this->rol)) {
+    if(!is_admin($this->rol)) {
       Flasher::new(get_notificaciones(), 'danger');
       Redirect::to('dashboard');
     }

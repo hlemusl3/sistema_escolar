@@ -116,7 +116,7 @@ class leccionModel extends Model {
         LEFT JOIN grupos g ON g.id = gm.id_grupo
         JOIN grupos_alumnos ga ON ga.id_grupo = g.id
         WHERE ga.id_alumno = :id_alumno AND l.status IN("publica") '.($id_materia === null || $id_profesor === null ? '' : 'AND l.id_materia = :id_materia AND l.id_profesor = :id_profesor').
-        ' ORDER BY m.id DESC, l.fecha_inicial DESC';
+        ' ORDER BY l.fecha_disponible DESC';
     
         $data =
         [
@@ -128,7 +128,7 @@ class leccionModel extends Model {
           $data['id_profesor'] = $id_profesor;
         }
     
-        return PaginationHandler::paginate($sql, $data);      
+        return ($rows = parent::query($sql, $data)) ? $rows : [];      
     }
 
     // Todas las lecciones sin importar su status

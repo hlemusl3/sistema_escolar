@@ -6,7 +6,7 @@
 <?php $rol = get_user_role(); ?>
 
     <?php if(is_admin($rol)): ?>
-        <ul class="navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
     <?php elseif(is_profesor($rol)): ?>
         <ul class="navbar-nav bg-gradient-danger sidebar sidebar-dark accordion" id="accordionSidebar">
     <?php elseif(is_alumno($rol)): ?>
