@@ -156,8 +156,16 @@
                                     <span class="d-block text-muted text-right"><?php echo sprintf('<strong>%s</strong>', get_user('rol') ); ?></span>
                                 </span>
 
-                                <img class="img-profile rounded-circle"
-                                    src="<?php echo IMAGES.'undraw_profile.svg'; ?>">
+                                <?php if(empty(get_user('foto'))): ?>
+                                    <img class="img-profile rounded-circle"
+                                        src="<?php echo IMAGES.'undraw_profile.svg'; ?>">
+                                <?php else: ?>
+                                    <img class="img-profile rounded-circle"
+                                        <?php $perfil_foto = usuarioModel::by_id(get_user('id'));?>
+                                        <?php $foto = $perfil_foto['foto']; ?>
+                                        src="<?php echo UPLOADED.$foto; ?>">
+                                <?php endif; ?>
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
