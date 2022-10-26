@@ -365,14 +365,18 @@ class gruposController extends Controller {
 
     $data = 
     [
-      'title' => sprintf('Lecciones y tareas de %s', $materia['nombre']),
+      'title' => sprintf('%s', $materia['nombre']),
       'title1' => sprintf('Lecciones disponibles para %s', $materia['nombre']),
       'title2' => sprintf('Tareas disponibles para %s', $materia['nombre']),
+      'title3' => sprintf('Foros disponibles para %s', $materia['nombre']),
+      'title4' => sprintf('Biblioteca de %s', $materia['nombre']),
       'slug' => 'materias',
       'button' => ['url' => 'materias/asignadas', 'text' => '<i class="fas fa-table"></i> Todas mis materias'],
       'lecciones' => leccionModel::by_materia_profesor($id, $this->id),
       'tareas' => tareaModel::by_materia_profesor($id, $this->id),
-      'materia' => $materia
+      'materia' => $materia,
+      'foros' => foroModel::by_materia_profesor($id, $this->id),
+      'recurso' => bibliotecaModel::by_materia_profesor($id, $this->id)
     ];
   
     View::render('materia', $data);

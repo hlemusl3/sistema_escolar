@@ -54,6 +54,13 @@
                     <span>Tareas</span></a>
             </li>
 
+            <!-- Foros -->
+            <li class="nav-item <?php echo $slug === 'foros' ? 'active' : null; ?>">
+                <a class="nav-link" href="foros">
+                    <i class="fas fa-fw fa-comments"></i>
+                    <span>Foros</span></a>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
