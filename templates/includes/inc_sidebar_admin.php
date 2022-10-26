@@ -11,6 +11,13 @@
                     <span>Dashboard</span></a>
             </li>
 
+            <li class="nav-item <?php echo $slug === 'mensajes' ? 'active' : null; ?>">
+                <a class="nav-link" href="mensajes">
+                    <i class="fas fa-fw fa-envelope"></i>
+                    <span>Mis mensajes</span></a>
+            </li>
+
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 

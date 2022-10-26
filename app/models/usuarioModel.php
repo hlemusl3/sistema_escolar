@@ -4,6 +4,13 @@ class usuarioModel extends Model
 {
   static $t1 = 'usuarios';
 
+  static function all()
+  {
+    // Todos los registros
+    $sql = 'SELECT * FROM usuarios ORDER BY id DESC';
+    return ($rows = parent::query($sql)) ? $rows : [];
+  }
+
   public static function by_email($email)
   {
     $sql = 'SELECT * FROM usuarios WHERE email = :email LIMIT 1';
