@@ -306,4 +306,78 @@ class alumnoController extends Controller {
       Redirect::back();
     }
   }
+
+  function foros()
+  {
+    $publicadas = true;
+    $id_materia = isset($_GET["id_materia"]) ? clean($_GET["id_materia"], true) : null;
+    $id_profesor = isset($_GET["id_profesor"]) ? clean($_GET["id_profesor"], true) : null;
+
+    $data =
+    [
+      'title' => 'Todos mis foros',
+      'slug' => 'alumno-foros',
+      'foros' => foroModel::by_alumno($this->id_alumno, $publicadas, $id_materia, $id_profesor)
+    ];
+    View::render('foros', $data);
+  }
+
+  function foro($id_foro)
+  {
+    //Validar que exista la foro
+    if(!$foro = foroModel::by_id($id_foro)){
+      Flasher::new('No existe el foro seleccionado.', 'danger');
+      Redirect::back();
+    }
+
+    //Validar el foro le pertenece al grupo del alumno / materia
+    $sql = 
+    'SELECT
+      u.*
+    FROM
+      usuarios u
+    JOIN grupos_alumnos ga ON ga.id_alumno = u.id
+    JOIN grupos g ON g.id = ga.id_grupo
+    JOIN grupos_materias gm ON gm.id_grupo = g.id
+    JOIN materias_profesores mp ON mp.id = gm.id_mp
+    JOIN foros f ON f.id_materia = mp.id_materia
+    AND f.id_profesor = mp.id_profesor
+    WHERE
+      u.id = :id_usuario
+    AND f.id = :id_foro LIMIT 1';
+
+    if (!foroModel::query($sql, ['id_usuario' => $this->id_alumno, 'id_foro' => $id_foro])) {
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::to('alumno/foros');
+    }
+
+    //Guardar las fechas de inicio y finalización de la lección
+    $time = time();
+    $min = strtotime($foro['fecha_inicial']);
+    $max = strtotime($foro['fecha_disponible']);
+
+    //Validar el acceso con base a la fecha inicial
+    if(($min - $time) > 0){
+      Flasher::new(sprintf('Este foro aún no está disponible, lo estará el día <b>%s</b>.', format_date($foro['fecha_inicial'])), 'danger');
+      Redirect::to('alumno/foros');
+    }
+
+    //Validar el acceso con base a la fecha final
+    if (($max - $time) < 0) {
+      Flasher::new(sprintf('Este foro ya no está disponible, caducó el día <b>%s</b>.', format_date($foro['fecha_disponible'])),'danger');
+      Redirect::to('alumno/foros');
+    }
+
+    $data = 
+    [
+      'title' => sprintf('Foro %s', $foro['titulo']),
+      'hide_title' => true,
+      'slug' => 'alumno-foros',
+      'f' => $foro,
+      'r' => foroModel::respuestas($id_foro)
+    ];
+
+    View::render('foro', $data);
+  }
+
 }

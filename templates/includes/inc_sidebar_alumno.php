@@ -42,11 +42,17 @@
 
             <!-- Foros -->
             <li class="nav-item <?php echo $slug === 'foros' ? 'active' : null; ?>">
-                <a class="nav-link" href="foros">
+                <a class="nav-link" href="alumno/foros">
                     <i class="fas fa-fw fa-comments"></i>
                     <span>Foros</span></a>
             </li>
 
+            <!-- Biblioteca -->
+            <li class="nav-item <?php echo $slug === 'biblioteca' ? 'active' : null; ?>">
+                <a class="nav-link" href="biblioteca">
+                    <i class="fas fa-fw fa-swatchbook"></i>
+                    <span>Biblioteca</span></a>
+            </li>
 
 <!-- Divider -->
 <hr class="sidebar-divider">

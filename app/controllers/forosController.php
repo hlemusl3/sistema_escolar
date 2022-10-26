@@ -183,6 +183,9 @@ class forosController extends Controller {
       $id = foroModel::add(foroModel::$t2, $data);
 
       Flasher::new('Tu respuesta ha sido agregada con éxito', 'success');
+      if(is_alumno(get_user_role()) && !is_admin(get_user_role())){
+        Redirect::to(sprintf('alumno/foro/%s', $id_foro));
+      }
       Redirect::to(sprintf('foros/ver/%s', $id_foro));
   }
 
