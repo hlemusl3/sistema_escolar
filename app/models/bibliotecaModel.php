@@ -21,7 +21,15 @@ class bibliotecaModel extends Model {
   static function all()
   {
     // Todos los registros
-    $sql = 'SELECT * FROM biblioteca ORDER BY id DESC';
+    $sql = 
+    'SELECT 
+    r.*, 
+    u.nombre_completo AS profesor,
+    m.nombre AS materia
+    FROM biblioteca r
+    LEFT JOIN usuarios u ON u.id = id_profesor
+    LEFT JOIN materias m ON m.id = r.id_materia
+    ORDER BY r.id DESC';
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 

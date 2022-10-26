@@ -20,7 +20,15 @@ class foroModel extends Model {
   static function all()
   {
     // Todos los registros
-    $sql = 'SELECT * FROM foros ORDER BY id DESC';
+    $sql = 
+    'SELECT 
+    f.*, 
+    u.nombre_completo AS profesor,
+    m.nombre AS materia
+    FROM foros f
+    LEFT JOIN usuarios u ON u.id = id_profesor
+    LEFT JOIN materias m ON m.id = f.id_materia
+    ORDER BY f.id DESC';
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
