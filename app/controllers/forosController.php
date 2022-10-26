@@ -23,10 +23,16 @@ class forosController extends Controller {
   
   function index()
   {
+    if(!is_admin($this->rol)){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
     $data = 
     [
-      'title' => 'Reemplazar título',
-      'msg'   => 'Bienvenido al controlador de "foros", se ha creado con éxito si ves este mensaje.'
+      'title' => 'Todos los foros',
+      'slug' => 'foros',
+      'foros' => foroModel::all()
     ];
     
     // Descomentar vista si requerida
@@ -310,4 +316,24 @@ class forosController extends Controller {
       Redirect::back();
     }
   }
+
+  function misforos()
+  {
+    if(!is_profesor($this->rol)){
+      Flasher::new(get_notificaciones(), 'danger');
+      Redirect::back();
+    }
+
+    $foros = foroModel::by_profesor($this->id);
+    $data =
+    [
+      'title' => 'Mis foros',
+      'slug' => 'foros',
+      
+      'foros' => $foros
+    ];
+
+    View::render('misforos',$data);
+  }
+
 }

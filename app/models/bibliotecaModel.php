@@ -49,5 +49,19 @@ class bibliotecaModel extends Model {
 
       return PaginationHandler::paginate($sql, ['id_materia' => $id_materia, 'id_profesor' => $id_profesor]);
   }
+
+  static function by_profesor($id)
+  {
+    // Todos los registros
+    $sql = 'SELECT 
+    r.*,
+    m.nombre AS materia
+    FROM biblioteca r
+    LEFT JOIN materias m ON m.id = r.id_materia
+    WHERE r.id_profesor = :id
+    ORDER BY r.id DESC';
+    return ($rows = parent::query($sql, ['id' => $id])) ? $rows : [];
+  }
+
 }
 

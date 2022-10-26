@@ -75,5 +75,18 @@ class foroModel extends Model {
         f.id = :id_foro';
     return ($rows = parent::query($sql, ['id_foro' => $id_foro])) ? $rows[0] : [];
   }
+
+  static function by_profesor($id)
+  {
+    // Todos los registros
+    $sql = 'SELECT 
+    f.*,
+    m.nombre AS materia
+    FROM foros f 
+    LEFT JOIN materias m ON m.id = f.id_materia
+    WHERE f.id_profesor = :id
+    ORDER BY f.id DESC';
+    return ($rows = parent::query($sql, ['id' => $id])) ? $rows : [];
+  }
 }
 

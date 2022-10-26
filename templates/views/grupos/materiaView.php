@@ -295,8 +295,8 @@
                             <li class="list-group-item">
                                 <div class="row align-items-center">
                                     <div class="col-xl-1">
-                                        <a href="<?php echo sprintf('assets/uploads/%s', $t->documento); ?>" >
-                                            <img src="<?php echo get_image('homework2.png'); ?>" alt="<?php echo $r->titulo;?>" class="img-fluid" style="width: 50px;">
+                                        <a href="<?php echo sprintf('assets/uploads/%s', $r->documento); ?>" >
+                                            <img src="<?php echo get_image('yumi_dir.png'); ?>" alt="<?php echo $r->titulo;?>" class="img-fluid" style="width: 50px;">
                                         </a>
                                     </div>
                                     <div class="col-xl-5">
@@ -312,8 +312,9 @@
 
                                     <div class="col-xl-3">
                                         <div class="btn-group float-right">
-                                        <a class="btn btn-success btn-sm" href="<?php echo sprintf('assets/uploads/%s', $t->documento); ?>"><i class="fas fa-download"></i></a>
-                                        <a class="btn btn-danger btn-sm confirmar" href="<?php echo buildURL(sprintf('biblioteca/borrar/%s', $t->id)); ?>"><i class="fas fa-trash"></i></a>                                        
+                                        <a class="btn btn-success btn-sm" href="<?php echo sprintf('biblioteca/editar/%s', $r->id); ?>"><i class="fas fa-edit"></i></a>                                        
+                                        <a class="btn btn-success btn-sm" href="<?php echo sprintf('assets/uploads/%s', $r->documento); ?>"><i class="fas fa-download"></i></a>
+                                        <a class="btn btn-danger btn-sm confirmar" href="<?php echo buildURL(sprintf('biblioteca/borrar/%s', $r->id)); ?>"><i class="fas fa-trash"></i></a>                                        
                                         </div>    
                                     </div>
                                 </div>
