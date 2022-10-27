@@ -11,6 +11,13 @@ class usuarioModel extends Model
     return ($rows = parent::query($sql)) ? $rows : [];
   }
 
+  static function all_admin()
+  {
+    // Todos los registros
+    $sql = 'SELECT * FROM usuarios WHERE rol = "admin" ORDER BY id DESC';
+    return ($rows = parent::query($sql)) ? $rows : [];
+  }
+
   public static function by_email($email)
   {
     $sql = 'SELECT * FROM usuarios WHERE email = :email LIMIT 1';
