@@ -71,5 +71,68 @@ class bibliotecaModel extends Model {
     return ($rows = parent::query($sql, ['id' => $id])) ? $rows : [];
   }
 
+  static function by_alumno($id_alumno, $publicadas = true, $id_materia = null, $id_profesor = null)
+  {
+    // Todos los recursos publicados
+    if ($publicadas === true) {
+        $sql =
+        'SELECT
+        r.*,
+        m.nombre AS materia,
+        u.nombre_completo AS profesor
+        FROM 
+        biblioteca r
+        JOIN materias_profesores mp ON mp.id_materia = r.id_materia AND mp.id_profesor = r.id_profesor
+        LEFT JOIN materias m ON m.id = mp.id_materia
+        LEFT JOIN usuarios u ON u.id = mp.id_profesor AND u.rol = "profesor"
+        LEFT JOIN grupos_materias gm ON gm.id_mp = mp.id
+        LEFT JOIN grupos g ON g.id = gm.id_grupo
+        JOIN grupos_alumnos ga ON ga.id_grupo = g.id
+        WHERE ga.id_alumno = :id_alumno AND r.status IN("publica") '.($id_materia === null || $id_profesor === null ? '' : 'AND r.id_materia = :id_materia AND r.id_profesor = :id_profesor').
+        ' ORDER BY r.creado DESC';
+    
+        $data =
+        [
+          'id_alumno' => $id_alumno
+        ];
+    
+        if ($id_materia !== null && $id_profesor !== null) {
+          $data['id_materia'] = $id_materia;
+          $data['id_profesor'] = $id_profesor;
+        }
+    
+        return ($rows = parent::query($sql, $data)) ? $rows : [];      
+    }
+
+    // Todas los foros sin importar su status
+    $sql =
+    'SELECT
+    f.*,
+    m.nombre AS materia,
+    u.nombre_completo AS profesor
+    FROM 
+    foros f
+    JOIN materias_profesores mp ON mp.id_materia = f.id_materia AND mp.id_profesor = f.id_profesor
+    LEFT JOIN materias m ON m.id = mp.id_materia
+    LEFT JOIN usuarios u ON u.id = mp.id_profesor AND u.rol = "profesor"
+    LEFT JOIN grupos_materias gm ON gm.id_mp = mp.id
+    LEFT JOIN grupos g ON g.id = gm.id_grupo
+    JOIN grupos_alumnos ga ON ga.id_grupo = g.id
+    WHERE ga.id_alumno = :id_alumno '.($id_materia === null || $id_profesor === null ? '' : 'AND f.id_materia = :id_materia AND f.id_profesor = :id_profesor');
+
+    $data =
+    [
+      'id_alumno' => $id_alumno
+    ];
+
+    if ($id_materia !== null && $id_profesor !== null) {
+      $data['id_materia'] = $id_materia;
+      $data['id_profesor'] = $id_profesor;
+    }
+
+    return PaginationHandler::paginate($sql, $data);
+  }
+
+
 }
 

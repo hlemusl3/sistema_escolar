@@ -316,7 +316,7 @@ class alumnoController extends Controller {
     $data =
     [
       'title' => 'Todos mis foros',
-      'slug' => 'alumno-foros',
+      'slug' => 'foros',
       'foros' => foroModel::by_alumno($this->id_alumno, $publicadas, $id_materia, $id_profesor)
     ];
     View::render('foros', $data);
@@ -372,12 +372,27 @@ class alumnoController extends Controller {
     [
       'title' => sprintf('Foro %s', $foro['titulo']),
       'hide_title' => true,
-      'slug' => 'alumno-foros',
+      'slug' => 'foros',
       'f' => $foro,
       'r' => foroModel::respuestas($id_foro)
     ];
 
     View::render('foro', $data);
+  }
+
+  function biblioteca()
+  {
+    $publicadas = true;
+    $id_materia = isset($_GET["id_materia"]) ? clean($_GET["id_materia"], true) : null;
+    $id_profesor = isset($_GET["id_profesor"]) ? clean($_GET["id_profesor"], true) : null;
+
+    $data =
+    [
+      'title' => 'Mi Biblioteca',
+      'slug' => 'biblioteca',
+      'recursos' => bibliotecaModel::by_alumno($this->id_alumno, $publicadas, $id_materia, $id_profesor)
+    ];
+    View::render('biblioteca', $data);
   }
 
 }

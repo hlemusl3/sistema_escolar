@@ -49,7 +49,7 @@
 
             <!-- Biblioteca -->
             <li class="nav-item <?php echo $slug === 'biblioteca' ? 'active' : null; ?>">
-                <a class="nav-link" href="biblioteca">
+                <a class="nav-link" href="alumno/biblioteca">
                     <i class="fas fa-fw fa-swatchbook"></i>
                     <span>Biblioteca</span></a>
             </li>
