@@ -68,6 +68,13 @@
                     <span>Biblioteca</span></a>
             </li>
 
+            <!-- Calendario -->
+            <li class="nav-item <?php echo $slug === 'calendario' ? 'active' : null; ?>">
+                <a class="nav-link" href="calendario">
+                    <i class="fas fa-fw fa-calendar-alt"></i>
+                    <span>Calendario</span></a>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 

@@ -1338,4 +1338,6 @@ function remover_suspension_alumno(e) {
       button.waitMe('hide');
     })
   }
+
+  
 });

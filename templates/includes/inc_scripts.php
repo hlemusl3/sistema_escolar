@@ -30,3 +30,9 @@
 
 <!-- Scripts personalizados Bee Framework -->
 <script src="<?php echo JS.'main.js?v='.get_version(); ?>"></script>
+
+<!-- Full Calendar -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.js"></script>
+<script src="<?php echo JS.'agenda.js'; ?>"></script>

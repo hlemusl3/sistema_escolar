@@ -22,19 +22,23 @@ class calendarioController extends Controller {
   
   function index()
   {
+    
+    if(is_admin(get_user_role())) {
+      $data=['tareas' => tareaModel::all()]; 
+    } elseif (is_profesor(get_user_role()) && !is_admin(get_user_role())) {
+      $data=['tareas' => tareaModel::by_profesor(get_user('id'))];
+    } elseif (is_alumno(get_user_role()) && !is_admin(get_user_role())) {
+      $data=['tareas' => tareaModel::by_alumno(get_user('id'), true, null, null)];
+    }
+    
     $data = 
     [
       'title' => 'Calendario',
-      'slug' => 'calendario'
-    ];
-    
+      'slug' => 'calendario',
+      'tareas' => $tareas = (is_admin(get_user_role())) ? tareaModel::all() : $tareas = (is_profesor(get_user_role()) && !is_admin(get_user_role())) ? tareaModel::by_profesor(get_user('id')) : tareaModel::by_alumno(get_user('id'), true, null, null) 
+    ]; 
     // Descomentar vista si requerida
     View::render('index', $data);
-  }
-
-  function ver($id)
-  {
-    View::render('ver');
   }
 
   function agregar()
