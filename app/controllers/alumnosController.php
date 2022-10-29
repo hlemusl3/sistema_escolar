@@ -110,12 +110,12 @@ class alumnosController extends Controller {
       }
 
       //Validar el nombre del usuario
-      if(strlen($nombres) < 3) {
+      if(strlen($nombres) < 2) {
         throw new Exception('Ingresa un nombre válido.');
       }
 
       //Validar el apellido del usuario
-      if(strlen($apellidos) < 3 ) {
+      if(strlen($apellidos) < 2 ) {
         throw new Exception('Ingresa un apellido válido.');
       }
 

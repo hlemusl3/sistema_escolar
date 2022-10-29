@@ -8,15 +8,15 @@
  * configuración especial en producción
  */
 define('IS_LOCAL'     , in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']));
-define('BASEPATH'     , IS_LOCAL ? '/cursos/sistema_escolar/' : '____EL BASEPATH EN PRODUCCIÓN___'); // Debe ser cambiada a la ruta de tu proyecto en producción y desarrollo
+define('BASEPATH'     , IS_LOCAL ? '/cursos/sistema_escolar/' : '/cursos/sistema_escolar/'); // Debe ser cambiada a la ruta de tu proyecto en producción y desarrollo
 define('IS_DEMO'      , false);
 
 // Set para conexión en producción o servidor real
 define('DB_ENGINE'    , 'mysql');
-define('DB_HOST'      , 'sql206.epizy.com');
-define('DB_NAME'      , 'epiz_32884676_db_sistema_escolar');
-define('DB_USER'      , 'epiz_32884676');
-define('DB_PASS'      , 'tFQdHH2EBz4GD');
+define('DB_HOST'      , 'sql105.epizy.com');
+define('DB_NAME'      , 'epiz_32886551_db_sistema_escolar');
+define('DB_USER'      , 'epiz_32886551');
+define('DB_PASS'      , '1DDnsRIOJp89R3');
 define('DB_CHARSET'   , 'utf8');
 
 /** Extra constants to be used */
