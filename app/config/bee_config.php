@@ -13,11 +13,11 @@ define('IS_DEMO'      , false);
 
 // Set para conexión en producción o servidor real
 define('DB_ENGINE'    , 'mysql');
-define('DB_HOST'      , 'localhost');
-define('DB_NAME'      , '___REMOTE DB___');
-define('DB_USER'      , '___REMOTE DB___');
-define('DB_PASS'      , '___REMOTE DB___');
-define('DB_CHARSET'   , '___REMOTE CHARTSET___');
+define('DB_HOST'      , 'sql206.epizy.com');
+define('DB_NAME'      , 'epiz_32884676_db_sistema_escolar');
+define('DB_USER'      , 'epiz_32884676');
+define('DB_PASS'      , 'tFQdHH2EBz4GD');
+define('DB_CHARSET'   , 'utf8');
 
 /** Extra constants to be used */
 
