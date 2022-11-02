@@ -8,8 +8,8 @@
  * configuración especial en producción
  */
 define('IS_LOCAL'     , in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']));
-define('BASEPATH'     , IS_LOCAL ? '/cursos/sistema_escolar/' : 'login'); // Debe ser cambiada a la ruta de tu proyecto en producción y desarrollo
-define('IS_DEMO'      , true);
+define('BASEPATH'     , IS_LOCAL ? '/cursos/sistema_escolar/' : '/'); // Debe ser cambiada a la ruta de tu proyecto en producción y desarrollo
+define('IS_DEMO'      , false);
 
 // Set para conexión en producción o servidor real
 define('DB_ENGINE'    , 'mysql');
